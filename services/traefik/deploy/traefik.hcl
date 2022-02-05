@@ -3,7 +3,7 @@ job "traefik" {
   type = "service"
 
   group "traefik" {
-    count = 1
+    count = 6
 
     network {
       port "http" {
@@ -57,7 +57,7 @@ job "traefik" {
     exposedByDefault = false
 
     [providers.consulCatalog.endpoint]
-      address = "127.0.0.1:8500"
+      address = "{{ GetInterfaceIP \"coldnet\" }}:8500"
       scheme  = "http"
         EOH
         destination = "local/traefik.toml"

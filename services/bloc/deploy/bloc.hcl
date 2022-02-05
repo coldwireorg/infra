@@ -84,14 +84,14 @@ job "bloc" {
         STORAGE_QUOTA = 4096
       }
 
-      volumes = [
-        "/mnt/storage/bloc:/storage"
-      ]
-
       config {
         image = "coldwireorg/bloc-backend:v0.1.0"
         ports = ["http"]
         network_mode = "host"
+
+        volumes = [
+          "/mnt/storage/bloc:/storage"
+        ]
       }
     }
   }
@@ -107,18 +107,18 @@ job "bloc" {
         POSTGRES_DB = "bloc" 
       }
 
-      volumes = [
-        "/mnt/storage/bloc/database:/data/db",
-        "/local/init.sh:/docker-entrypoint-initdb.d/"
-        "/local/tables.sql:/docker-entrypoint-initdb.d/"
-      ]
-
       config {
         image = "postgres:latest"
         network_mode = "host"
         port_map {
           postgresql = 5432
         }
+
+        volumes = [
+          "/mnt/storage/bloc/database:/data/db",
+          "/local/init.sh:/docker-entrypoint-initdb.d/"
+          "/local/tables.sql:/docker-entrypoint-initdb.d/"
+        ]
       }
 
       resources {

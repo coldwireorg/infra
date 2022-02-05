@@ -26,3 +26,12 @@ client {
 consul {
   address = "{{ GetInterfaceIP \"coldnet\" }}:8500"
 }
+
+
+plugin "docker" {
+  config {
+    volumes {
+      enabled = true
+    }
+  }
+}

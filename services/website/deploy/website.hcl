@@ -1,5 +1,5 @@
 job "coldwire-website" {
-  datacenters = ["dc1", "coldwire"]
+  datacenters = ["dc1", "coldnet"]
 
   group "website" {
     count = 2
@@ -11,8 +11,10 @@ job "coldwire-website" {
     }
 
     service {
-      name = "coldwire-website"
+      name = "website"
       port = "http"
+
+      address_mode = "host"
 
       tags = [
         "traefik.enable=true",
@@ -32,11 +34,12 @@ job "coldwire-website" {
         SERVER_PORT = "${NOMAD_PORT_http}"
       }
 
-      driver = "podman"
+      driver = "docker"
 
       config {
-        image = "docker://coldwireorg/website"
+        image = "coldwireorg/website:v0.0.8"
         ports = ["http"]
+        network_mode = "host"
       }
     }
   }

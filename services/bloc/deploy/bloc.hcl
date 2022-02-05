@@ -52,7 +52,7 @@ job "bloc" {
         to = -1
       }
       port "postgres" {
-        to = 5432
+        to = -1
       }
     }
 
@@ -81,7 +81,7 @@ job "bloc" {
       }
 
       config {
-        image = "coldwireorg/bloc-backend:v0.1.0"
+        image = "coldwireorg/bloc-backend:v0.1.1"
         ports = ["http"]
         network_mode = "host"
 
@@ -93,6 +93,11 @@ job "bloc" {
 
     task "database" {
       driver = "docker"
+
+      lifecycle {
+        hook = "prestart"
+        sidecar = true
+      }
 
       env {
         POSTGRES_USER = "postgres"

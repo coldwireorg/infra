@@ -37,7 +37,7 @@ job "bloc" {
       }
 
       config {
-        image = "coldwireorg/bloc-frontend:v0.1.0"
+        image = "coldwireorg/bloc-frontend:v0.1.1"
         ports = ["http"]
         network_mode = "host"
       }

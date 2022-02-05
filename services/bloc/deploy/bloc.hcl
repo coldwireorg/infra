@@ -44,40 +44,43 @@ job "bloc" {
     }
   }
 
-  group "bloc-api" {
+  group "bloc-backend" {
     count = 1
 
     network {
       port "http" {
         to = -1
       }
-    }
-
-    service {
-      name = "bloc-backend"
-      port = "http"
-
-      address_mode = "host"
-
-      tags = [
-        "traefik.enable=true",
-        "traefik.http.routers.http.rule=Host(`dev.api.bloc.coldwire.org`) || Host(`api.bloc.coldwire.org`)",
-      ]
-
-      check {
-        type     = "http"
-        path     = "/"
-        interval = "2s"
-        timeout  = "2s"
+      port "postgres" {
+        to = 5432
       }
     }
 
     task "backend" {
       driver = "docker"
 
+      service {
+        name = "bloc-backend"
+        port = "http"
+
+        address_mode = "host"
+
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.http.rule=Host(`dev.api.bloc.coldwire.org`) || Host(`api.bloc.coldwire.org`)",
+        ]
+
+        check {
+          type     = "http"
+          path     = "/"
+          interval = "2s"
+          timeout  = "2s"
+        }
+      }
+
       env {
         SERVER_PORT = "${NOMAD_PORT_http}"
-        DB_URL = "postgresql://{{ range service "postgresql" }}{{ .Address }}:{{ .Port }}{{ end }}/bloc?user=postgres&password=12345"
+        DB_URL = "postgresql://${NOMAD_IP_postgres}:${NOMAD_PORT_postgres}/bloc?user=postgres&password=12345"
         STORAGE_DIR = "/storage"
         SERVER_DOMAIN = "coldwire.org"
         SERVER_HTTPS = true
@@ -94,11 +97,8 @@ job "bloc" {
         ]
       }
     }
-  }
 
-  group "bloc-db" {
-    task "postgresql" {
-
+    task "database" {
       driver = "docker"
 
       env {
@@ -109,23 +109,14 @@ job "bloc" {
 
       config {
         image = "postgres:latest"
+        ports = ["postgres"]
         network_mode = "host"
-        port_map {
-          postgresql = 5432
-        }
 
         volumes = [
           "/mnt/storage/bloc/database:/data/db",
           "/local/init.sh:/docker-entrypoint-initdb.d/"
           "/local/tables.sql:/docker-entrypoint-initdb.d/"
         ]
-      }
-
-      resources {
-        network {
-          mbits = 100
-          port "postgresql" {}
-        }
       }
 
       service {

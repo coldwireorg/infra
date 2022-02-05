@@ -57,7 +57,7 @@ job "traefik" {
     exposedByDefault = false
 
     [providers.consulCatalog.endpoint]
-      address = "{{ GetInterfaceIP \"coldnet\" }}:8500"
+      address = "10.42.0.1:8500"
       scheme  = "http"
         EOH
         destination = "local/traefik.toml"

@@ -2,7 +2,7 @@ job "bloc" {
   datacenters = ["dc1", "coldnet"]
 
   group "bloc-front" {
-    count = 4
+    count = 2
 
     network {
       port "http" {
@@ -31,6 +31,10 @@ job "bloc" {
 
     task "frontend" {
       driver = "docker"
+
+      env {
+        PORT = ${NOMAD_PORT_http}
+      }
 
       config {
         image = "coldwireorg/bloc-frontend:v0.1.0"
@@ -89,7 +93,7 @@ job "bloc" {
         network_mode = "host"
 
         volumes = [
-          "/mnt/storage/bloc:/storage"
+          "/mnt/storage/services/bloc/storage:/storage"
         ]
       }
     }
@@ -109,9 +113,8 @@ job "bloc" {
         network_mode = "host"
 
         volumes = [
-          "/mnt/storage/bloc/database:/data/db",
-          "/local/init.sh:/docker-entrypoint-initdb.d/",
-          "/local/tables.sql:/docker-entrypoint-initdb.d/",
+          "/mnt/storage/services/bloc/database:/data/db",
+          "/local/:/docker-entrypoint-initdb.d/",
         ]
       }
 
@@ -130,14 +133,14 @@ job "bloc" {
         }
       }
 
-      template {
-        source = "../config/init.sh"
-        destination = "local/init.sh"
+      artifact {
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/bloc/config/init.sh"
+        destination = "local/"
       }
 
-      template {
-        source = "../config/tables.sql"
-        destination = "local/tables.sql"
+      artifact {
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/bloc/config/tables.sql"
+        destination = "local/"
       }
     }
   }

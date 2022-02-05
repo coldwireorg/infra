@@ -67,7 +67,7 @@ job "bloc" {
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.blocbackend.rule=(Host(`dev.bloc.coldwire.org`) && Path(`/api`)) || (Host(`bloc.coldwire.org`) && Path(`/api`))",
+          "traefik.http.routers.blocbackend.rule=(Host(`dev.bloc.coldwire.org`) && PathPrefix(`/api`)) || (Host(`bloc.coldwire.org`) && PathPrefix(`/api`))",
         ]
       }
 
@@ -106,7 +106,7 @@ job "bloc" {
         network_mode = "host"
 
         volumes = [
-          "/mnt/storage/services/bloc/database:/data/db",
+          "/mnt/storage/services/bloc/database:/var/lib/postgresql/data",
           "/local/:/docker-entrypoint-initdb.d/",
         ]
       }

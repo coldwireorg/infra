@@ -114,8 +114,8 @@ job "bloc" {
 
         volumes = [
           "/mnt/storage/bloc/database:/data/db",
-          "/local/init.sh:/docker-entrypoint-initdb.d/"
-          "/local/tables.sql:/docker-entrypoint-initdb.d/"
+          "/local/init.sh:/docker-entrypoint-initdb.d/",
+          "/local/tables.sql:/docker-entrypoint-initdb.d/",
         ]
       }
 

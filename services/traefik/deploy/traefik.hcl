@@ -1,5 +1,5 @@
 job "traefik" {
-  datacenters = ["dc1", "coldwire"]
+  datacenters = ["dc1", "coldnet"]
   type = "service"
 
   group "traefik" {

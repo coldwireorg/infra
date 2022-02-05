@@ -67,7 +67,7 @@ job "bloc" {
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.blocbackend.rule=(Host(`dev.bloc.coldwire.org`) && Path(`/api`)) || (Host(`dev.bloc.coldwire.org`) && Path(`/api`))",
+          "traefik.http.routers.blocbackend.rule=(Host(`dev.bloc.coldwire.org`) && Path(`/api`)) || (Host(`bloc.coldwire.org`) && Path(`/api`))",
         ]
       }
 

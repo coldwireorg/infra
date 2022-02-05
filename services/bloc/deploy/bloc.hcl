@@ -18,7 +18,7 @@ job "bloc" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.http.rule=Host(`dev.bloc.coldwire.org`) || Host(`bloc.coldwire.org`)",
+        "traefik.http.routers.blocfrontend.rule=Host(`dev.bloc.coldwire.org`) || Host(`bloc.coldwire.org`)",
       ]
 
       check {
@@ -67,15 +67,8 @@ job "bloc" {
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.http.rule=Host(`dev.api.bloc.coldwire.org`) || Host(`api.bloc.coldwire.org`)",
+          "traefik.http.routers.blocbackend.rule=(Host(`dev.bloc.coldwire.org`) && Path(`/api`)) || (Host(`dev.bloc.coldwire.org`) && Path(`/api`))",
         ]
-
-        #check {
-        #  type     = "http"
-        #  path     = "/"
-        #  interval = "2s"
-        #  timeout  = "2s"
-        #}
       }
 
       env {

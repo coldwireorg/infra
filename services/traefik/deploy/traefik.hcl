@@ -28,10 +28,10 @@ job "traefik" {
     }
 
     task "traefik" {
-      driver = "podman"
+      driver = "docker"
 
       config {
-        image = "docker://traefik:latest"
+        image = "traefik:latest"
         network_mode = "host"
 
         volumes = [

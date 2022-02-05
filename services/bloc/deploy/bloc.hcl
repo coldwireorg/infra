@@ -70,12 +70,12 @@ job "bloc" {
           "traefik.http.routers.http.rule=Host(`dev.api.bloc.coldwire.org`) || Host(`api.bloc.coldwire.org`)",
         ]
 
-        check {
-          type     = "http"
-          path     = "/"
-          interval = "2s"
-          timeout  = "2s"
-        }
+        #check {
+        #  type     = "http"
+        #  path     = "/"
+        #  interval = "2s"
+        #  timeout  = "2s"
+        #}
       }
 
       env {

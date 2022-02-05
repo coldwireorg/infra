@@ -29,12 +29,8 @@ job "bloc" {
       }
     }
 
-    task "backend" {
+    task "frontend" {
       driver = "docker"
-
-      env {
-        API_BASE = "https://api.bloc.coldwire.org"
-      }
 
       config {
         image = "coldwireorg/bloc-frontend:v0.1.0"
@@ -121,7 +117,7 @@ job "bloc" {
 
       service {
         name = "postgresql"
-        port = "postgresql"
+        port = "postgres"
 
         address_mode = "host"
 

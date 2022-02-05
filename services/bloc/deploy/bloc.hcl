@@ -33,7 +33,7 @@ job "bloc" {
       driver = "docker"
 
       env {
-        PORT = ${NOMAD_PORT_http}
+        PORT = "${NOMAD_PORT_http}"
       }
 
       config {

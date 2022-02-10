@@ -1,8 +1,9 @@
 job "coldwire-website" {
   datacenters = ["dc1", "coldnet"]
+  priority = 60
 
   group "website" {
-    count = 2
+    count = 4
 
     network {
       port "http" {
@@ -18,7 +19,10 @@ job "coldwire-website" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.http.rule=Host(`dev.coldwire.org`) || Host(`coldwire.org`)",
+        "traefik.http.routers.http.rule=Host(`coldwire.org`)",
+        "traefik.http.routers.cw-website.rule=Host(`coldwire.org`)",
+        "traefik.http.routers.cw-website.tls=true",
+        "traefik.http.routers.cw-website.tls.certresolver=coldwire",
       ]
 
       check {

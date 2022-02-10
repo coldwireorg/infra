@@ -1,4 +1,4 @@
-FROM node:17.2.0-bullseye as builder
+FROM node:17.2-bullseye as builder
 RUN apt install git
 WORKDIR /tmp/bloc
 RUN git init && \
@@ -9,7 +9,7 @@ ARG API_BASE
 ENV VITE_API_BASE $API_BASE
 RUN npm run build
 
-FROM node:12.22.10-bullseye-slim
+FROM node:17.2-bullseye-slim
 WORKDIR /app
 COPY --from=builder /tmp/bloc .
 CMD ["node", "./build"]

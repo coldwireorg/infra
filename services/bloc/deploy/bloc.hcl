@@ -1,5 +1,6 @@
 job "bloc" {
   datacenters = ["dc1", "coldnet"]
+  priotity = 80
 
   group "bloc-front" {
     count = 2
@@ -18,7 +19,11 @@ job "bloc" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.blocfrontend.rule=Host(`dev.bloc.coldwire.org`) || Host(`bloc.coldwire.org`)",
+        "traefik.http.routers.blocfrontend.rule=Host(`bloc.coldwire.org`)",
+        "traefik.http.routers.cw-bloc-front.rule=Host(`bloc.coldwire.org`)",
+        "traefik.http.routers.cw-bloc-front.tls=true",
+        "traefik.http.routers.cw-bloc-front.tls.certresolver=coldwire",
+
       ]
 
       check {
@@ -37,7 +42,7 @@ job "bloc" {
       }
 
       config {
-        image = "coldwireorg/bloc-frontend:v0.1.1"
+        image = "coldwireorg/bloc-frontend:v0.1.4"
         ports = ["http"]
         network_mode = "host"
       }
@@ -52,7 +57,7 @@ job "bloc" {
         to = -1
       }
       port "postgres" {
-        to = -1
+        to = 5432
       }
     }
 
@@ -67,7 +72,11 @@ job "bloc" {
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.blocbackend.rule=(Host(`dev.bloc.coldwire.org`) && PathPrefix(`/api`)) || (Host(`bloc.coldwire.org`) && PathPrefix(`/api`))",
+          "traefik.http.routers.blocbackend.rule=(Host(`bloc.coldwire.org`) && PathPrefix(`/api`))",
+          "traefik.http.routers.cw-bloc-back.rule=(Host(`bloc.coldwire.org`) && PathPrefix(`/api`))",
+          "traefik.http.routers.cw-bloc-back.tls=true",
+          "traefik.http.routers.cw-bloc-back.tls.certresolver=coldwire",
+          "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=30746254628"
         ]
       }
 

@@ -40,7 +40,7 @@ job "coldwire-static" {
       driver = "docker"
 
       config {
-        image = "coldwireorg/static:v0.0.1"
+        image = "coldwireorg/static:v0.0.2"
         ports = ["http"]
         network_mode = "host"
       }

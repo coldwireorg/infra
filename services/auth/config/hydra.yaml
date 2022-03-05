@@ -1,0 +1,25 @@
+serve:
+  cookies:
+    same_site_mode: Lax
+  cors:
+    enabled: true
+    allowed_origins:
+      - https://*.coldwire.org
+
+urls:
+  self:
+    issuer: https://coldwire.org
+    public: https://auth.coldwire.org
+  consent: https://auth.coldwire.org/api/consent
+  login: https://auth.coldwire.org/login
+  logout: https://auth.coldwire.org/api/logout
+
+secrets:
+  system:
+    - youReallyNeedToChangeThis
+
+oidc:
+  subject_identifiers:
+    supported_types:
+      - pairwise
+      - public

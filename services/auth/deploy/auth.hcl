@@ -87,7 +87,7 @@ job "cw-auth" {
 
         volumes = [
           "/mnt/storage/services/auth/hydra/:/database/",
-          "/config/:/config/",
+          "config/hydra.yaml:/config/hydra.yaml",
         ]
       }
 
@@ -117,12 +117,12 @@ job "cw-auth" {
         network_mode = "host"
 
         command = "bash"
-        args = ["-c", "psql -U postgres -d auth < /tables/tables.sql"]
+        args = ["-c", "psql -U postgres -d auth < /tables.sql"]
 
 
         volumes = [
           "/mnt/storage/services/auth/database:/var/lib/postgresql/data",
-          "/local:/tables",
+          "local/tables.sql:/tables.sql",
         ]
       }
 

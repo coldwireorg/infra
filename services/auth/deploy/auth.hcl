@@ -87,12 +87,13 @@ job "cw-auth" {
         ]
 
         volumes = [
-          "local/:/local",
+          "local/hydra.yaml:/config/hydra.yaml",
         ]
       }
 
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
+        mode = "file"
       }
     }
 
@@ -132,17 +133,18 @@ job "cw-auth" {
         command = "serve"
         args = [
           "-c",
-          "/local/hydra.yaml",
+          "/config/hydra.yaml",
           "all"
         ]
 
         volumes = [
-          "local/:/local",
+          "local/hydra.yaml:/config/hydra.yaml",
         ]
       }
 
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
+        mode = "file"
       }
     }
 

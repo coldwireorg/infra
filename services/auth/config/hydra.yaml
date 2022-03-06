@@ -1,10 +1,6 @@
 serve:
   cookies:
     same_site_mode: Lax
-  cors:
-    enabled: true
-    allowed_origins:
-      - https://*.coldwire.org
 urls:
   self:
     issuer: https://coldwire.org/

@@ -83,13 +83,13 @@ job "cw-auth" {
           "sql",
           "-e",
           "--yes",
-          "-c /local/hydra.yaml"
+          "-c",
+          "/local/hydra.yaml"
         ]
       }
 
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
-        mode = "file"
       }
     }
 
@@ -136,7 +136,6 @@ job "cw-auth" {
 
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
-        mode = "file"
       }
     }
 

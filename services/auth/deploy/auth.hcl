@@ -85,10 +85,6 @@ job "cw-auth" {
           "--yes",
           "-c /local/hydra.yaml"
         ]
-
-        volumes = [
-          "local/hydra.yaml:/config/hydra.yaml",
-        ]
       }
 
       artifact {
@@ -133,12 +129,8 @@ job "cw-auth" {
         command = "serve"
         args = [
           "-c",
-          "/config/hydra.yaml",
+          "/local/hydra.yaml",
           "all"
-        ]
-
-        volumes = [
-          "local/hydra.yaml:/config/hydra.yaml",
         ]
       }
 

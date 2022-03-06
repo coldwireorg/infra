@@ -1,6 +1,5 @@
 job "cw-auth" {
   datacenters = ["dc1", "coldnet"]
-  priotity = 80
 
   group "cw-auth" {
     count = 1
@@ -123,7 +122,7 @@ job "cw-auth" {
 
         volumes = [
           "/mnt/storage/services/auth/database:/var/lib/postgresql/data",
-          "/local/:/tables/",
+          "/local:/tables",
         ]
       }
 

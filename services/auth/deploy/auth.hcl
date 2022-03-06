@@ -87,13 +87,13 @@ job "cw-auth" {
         ]
 
         volumes = [
-          "local:/local/",
+          "local/:/local/",
         ]
       }
 
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
-        destination = "local"
+        destination = "local/"
       }
     }
 
@@ -138,13 +138,13 @@ job "cw-auth" {
         ]
 
         volumes = [
-          "local:/local/",
+          "local/:/local/",
         ]
       }
 
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
-        destination = "local"
+        destination = "local/"
       }
     }
 

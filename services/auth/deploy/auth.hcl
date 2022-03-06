@@ -117,13 +117,9 @@ job "cw-auth" {
         ports = ["postgres"]
         network_mode = "host"
 
-        #command = "bash"
-        #args = ["-c", "psql -U postgres -d auth < /tables.sql"]
-
-
         volumes = [
           "/mnt/storage/services/auth/database:/var/lib/postgresql/data",
-          "local/tables.sql:/tables.sql",
+          "local/tables.sql:/docker-entrypoint-initdb.d/tables.sql",
         ]
       }
 

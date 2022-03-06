@@ -106,7 +106,7 @@ job "cw-auth" {
 
       service {
         name = "cw-auth-hydra"
-        port = "http"
+        port = "hydra-public"
 
         address_mode = "host"
 
@@ -115,7 +115,6 @@ job "cw-auth" {
           "traefik.http.routers.cw-auth-hydra.rule=Host(`auth.coldwire.org`) && (PathPrefix(`/oauth2`) || PathPrefix(`/.well-known/openid-configuration`))",
           "traefik.http.routers.cw-auth-hydra.tls=true",
           "traefik.http.routers.cw-auth-hydra.tls.certresolver=coldwire",
-          "traefik.http.routers.cw-auth-hydra.loadbalancer.server.port=${NOMAD_PORT_hydra-public}",
         ]
       }
 

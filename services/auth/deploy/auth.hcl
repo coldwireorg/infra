@@ -128,7 +128,7 @@ job "cw-auth" {
         URLS_CONSENT="https://auth.coldwire.org/api/consent"
         URLS_LOGOUT="https://auth.coldwire.org/api/logout"
         URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/sign-in"
-        URLS_SELF_ISSUER="https://auth.coldwire.org/"
+        URLS_SELF_ISSUER="https://auth.coldwire.org/
       }
 
       config {

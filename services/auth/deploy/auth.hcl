@@ -84,8 +84,8 @@ job "cw-auth" {
 
         command = "sh"
         args = [
-          "-c"
-          "/config/init.sh"
+          "-c",
+          "/config/init.sh",
         ]
 
         volumes = [

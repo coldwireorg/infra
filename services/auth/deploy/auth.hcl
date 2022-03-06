@@ -56,7 +56,7 @@ job "cw-auth" {
       }
 
       config {
-        image = "coldwireorg/auth:v0.0.3"
+        image = "coldwireorg/auth:v0.0.4"
         ports = ["http"]
         network_mode = "host"
       }
@@ -112,7 +112,7 @@ job "cw-auth" {
 
         tags = [       
           "traefik.enable=true",
-          "traefik.http.routers.cw-auth-hydra.rule=Host(`auth.coldwire.org`) && (PathPrefix(`/oauth2`) || PathPrefix(`/.well-known`))",
+          "traefik.http.routers.cw-auth-hydra.rule=Host(`auth.coldwire.org`) && (PathPrefix(`/oauth2`) || PathPrefix(`/.well-known`) || PathPrefix(`/userinfo`))",
           "traefik.http.routers.cw-auth-hydra.tls=true",
           "traefik.http.routers.cw-auth-hydra.tls.certresolver=coldwire",
         ]

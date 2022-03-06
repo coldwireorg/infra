@@ -137,7 +137,7 @@ job "cw-auth" {
         ]
 
         volumes = [
-          "/mnt/storage/services/auth/hydra/:/database/",
+          "/mnt/storage/services/auth/hydra/db.sqlite:/database/db.sqlite",
           "config/hydra.yaml:/config/hydra.yaml",
           "local/init.sh:/config/init.sh",
         ]

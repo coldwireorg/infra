@@ -15,7 +15,7 @@ job "cw-auth" {
         to = 4445
       }
       port "postgres" {
-        to = 5432
+        to = -1
       }
     }
 
@@ -108,7 +108,8 @@ job "cw-auth" {
       env {
         POSTGRES_USER = "postgres"
         POSTGRES_PASSWORD = "12345"
-        POSTGRES_DB = "auth" 
+        POSTGRES_DB = "auth"
+        PGPORT = "${NOMAD_PORT_postgres}"
       }
 
       config {
@@ -116,8 +117,8 @@ job "cw-auth" {
         ports = ["postgres"]
         network_mode = "host"
 
-        command = "bash"
-        args = ["-c", "psql -U postgres -d auth < /tables.sql"]
+        #command = "bash"
+        #args = ["-c", "psql -U postgres -d auth < /tables.sql"]
 
 
         volumes = [

@@ -180,7 +180,7 @@ job "cw-auth" {
 
       service {
         name = "cw-auth-web-postgres"
-        port = ["web-db"]
+        port = "web-db"
 
         address_mode = "host"
 

@@ -9,10 +9,10 @@ job "cw-auth" {
         to = -1
       }
       port "hydra-public" {
-        to = 4444
+        to = -1
       }
       port "hydra-admin" {
-        to = 4445
+        to = -1
       }
       port "web-db" {
         to = -1
@@ -112,7 +112,7 @@ job "cw-auth" {
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.cw-auth-hydra.rule=((Host(`auth.coldwire.org`) && PathPrefix(`/oauth2`)) || (Host(`auth.coldwire.org`) && PathPrefix(`/.well-known/openid-configuration`)))",
+          "traefik.http.routers.cw-auth-hydra.rule=(Host(`auth.coldwire.org`) && (PathPrefix(`/oauth2`) || PathPrefix(`/.well-known/openid-configuration`)))",
           "traefik.http.routers.cw-auth-hydra.tls=true",
           "traefik.http.routers.cw-auth-hydra.tls.certresolver=coldwire",
           "traefik.http.routers.cw-auth-hydra.loadbalancer.server.port=${NOMAD_PORT_hydra-public}",

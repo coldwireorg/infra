@@ -5,21 +5,11 @@ serve:
     enabled: true
     allowed_origins:
       - https://*.coldwire.org
-
 urls:
   self:
-    issuer: https://coldwire.org
-    public: https://auth.coldwire.org
+    issuer: https://coldwire.org/
+    public: https://auth.coldwire.org/
   consent: https://auth.coldwire.org/api/consent
-  login: https://auth.coldwire.org/login
+  login: https://auth.coldwire.org/sign-in
   logout: https://auth.coldwire.org/api/logout
-
-secrets:
-  system:
-    - youReallyNeedToChangeThis
-
-oidc:
-  subject_identifiers:
-    supported_types:
-      - pairwise
-      - public
+  post_logout_redirect: https://auth.coldwire.org/sign-in

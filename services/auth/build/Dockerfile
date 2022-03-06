@@ -1,5 +1,4 @@
 FROM golang:1.17.6-bullseye as builder
-RUN apt-get update && apt-get install -y gcc-aarch64-linux-gnu
 WORKDIR /tmp/auth
 RUN git init && \
     git remote add origin https://codeberg.org/coldwire/auth.git && \

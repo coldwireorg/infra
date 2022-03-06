@@ -38,8 +38,13 @@ job "cw-auth" {
       }
 
       env {
-        HYDRA_ADMIN_URL = "http://${NOMAD_IP_hydra-admin}:${NOMAD_PORT_hydra-admin}"
-        SERVER_PORT = "${NOMAD_PORT_http}"
+        DOMAIN = "auth.coldwire.org"
+        SERVER_PORT ="${NOMAD_PORT_http}"
+
+        AUTH_SERVER_URL = "https://auth.coldwire.org"
+        HYDRA_PUBLIC_URL = "https://auth.coldwire.org"
+        HYDRA_ADMIN_URL = "${NOMAD_IP_hydra-admin}:${NOMAD_PORT_hydra-admin}"
+
         DB_URL = "postgresql://postgres:12345@${NOMAD_IP_postgres}:${NOMAD_PORT_postgres}/auth"
       }
 
@@ -69,7 +74,8 @@ job "cw-auth" {
       }
 
       env {
-        DSN = "postgres://postgres:12345@${NOMAD_IP_postgres}:${NOMAD_PORT_postgres}/hydra"
+        DSN = "sqlite:///database/db.sqlite?_fk=true"
+        SECRETS_SYSTEM = "ThisIsJustASuperToken!"
       }
 
       config {
@@ -77,22 +83,18 @@ job "cw-auth" {
         ports = ["hydra-public", "hydra-admin"]
         network_mode = "host"
 
-        command = "/usr/bin/hydra"
-        args = [
-          "serve"
-          "-c"
-          "/etc/config/hydra/hydra.yml"
-          "all"
-        ]
+        command = "bash"
+        args = ["-c", "/usr/bin/hydra migrate sql -e --yes -c /config/hydra.yaml && /usr/bin/hydra serve -c /config/hydra.yaml all"]
 
         volumes = [
-          "/local/:/etc/config/hydra/",
+          "/mnt/storage/services/auth/hydra/:/database/",
+          "/config/:/config/",
         ]
       }
 
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
-        destination = "local/"
+        destination = "config/"
       }
     }
 
@@ -107,7 +109,7 @@ job "cw-auth" {
       env {
         POSTGRES_USER = "postgres"
         POSTGRES_PASSWORD = "12345"
-        POSTGRES_DB = "hydra" 
+        POSTGRES_DB = "auth" 
       }
 
       config {
@@ -115,9 +117,13 @@ job "cw-auth" {
         ports = ["postgres"]
         network_mode = "host"
 
+        command = "bash"
+        args = ["-c", "psql -U postgres -d auth < /tables/tables.sql"]
+
+
         volumes = [
           "/mnt/storage/services/auth/database:/var/lib/postgresql/data",
-          "/local/:/docker-entrypoint-initdb.d/",
+          "/local/:/tables/",
         ]
       }
 
@@ -135,12 +141,7 @@ job "cw-auth" {
           timeout  = "45s"
         }
       }
-
-      artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/init.sh"
-        destination = "local/"
-      }
-
+      
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/tables.sql"
         destination = "local/"

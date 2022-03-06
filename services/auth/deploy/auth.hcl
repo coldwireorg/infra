@@ -75,9 +75,8 @@ job "cw-auth" {
         image = "oryd/hydra:v1.11.7"
         network_mode = "host"
 
-        command = "hydra"
+        command = "migrate"
         args = [
-          "migrate",
           "sql",
           "-e",
           "--yes",
@@ -130,9 +129,8 @@ job "cw-auth" {
         ports = ["hydra-public", "hydra-admin"]
         network_mode = "host"
 
-        command = "hydra"
+        command = "serve"
         args = [
-          "serve",
           "-c",
           "/config/hydra.yaml",
           "all"

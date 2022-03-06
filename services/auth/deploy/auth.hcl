@@ -54,6 +54,49 @@ job "cw-auth" {
       }
     }
 
+    task "hydra-migrate" {
+      driver = "docker"
+
+      lifecycle {
+        hook = "prestart"
+        sidecar = false
+      }
+
+      env {
+        DSN = "sqlite:///database/db.sqlite?_fk=true"
+      }
+
+      config {
+        image = "oryd/hydra:v1.11.7"
+        network_mode = "host"
+
+        command = "hydra"
+        args = [
+          "migrate",
+          "sql",
+          "-e",
+          "--yes",
+          "-c /config/hydra.yaml"
+        ]
+
+        volumes = [
+          "/mnt/storage/services/auth/hydra/:/database/",
+          "config/hydra.yaml:/config/hydra.yaml",
+          "local/init.sh:/config/init.sh",
+        ]
+      }
+
+      artifact {
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
+        destination = "config/"
+      }
+
+      artifact {
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/init.sh"
+        destination = "local/"
+      }
+    }
+
     task "hydra" {
       driver = "docker"
 
@@ -82,10 +125,12 @@ job "cw-auth" {
         ports = ["hydra-public", "hydra-admin"]
         network_mode = "host"
 
-        command = "sh"
+        command = "hydra"
         args = [
+          "serve",
           "-c",
-          "/config/init.sh",
+          "/config/hydra.yaml",
+          "all"
         ]
 
         volumes = [

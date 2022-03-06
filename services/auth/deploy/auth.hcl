@@ -22,6 +22,11 @@ job "cw-auth" {
     task "web" {
       driver = "docker"
 
+      lifecycle {
+        hook = "poststart"
+        sidecar = false
+      }
+
       service {
         name = "cw-auth-web"
         port = "http"
@@ -90,15 +95,15 @@ job "cw-auth" {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
         destination = "config/"
       }
-
-      artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/init.sh"
-        destination = "local/"
-      }
     }
 
     task "hydra" {
       driver = "docker"
+
+      lifecycle {
+        hook = "poststart"
+        sidecar = false
+      }
 
       service {
         name = "cw-auth-hydra"
@@ -143,11 +148,6 @@ job "cw-auth" {
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
         destination = "config/"
-      }
-
-      artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/init.sh"
-        destination = "local/"
       }
     }
 

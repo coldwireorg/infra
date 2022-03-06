@@ -164,7 +164,7 @@ job "cw-auth" {
         POSTGRES_USER = "postgres"
         POSTGRES_PASSWORD = "12345"
         POSTGRES_DB = "auth"
-        PGPORT = "${NOMAD_PORT_postgres}"
+        PGPORT = "${NOMAD_PORT_web-db}"
       }
 
       config {
@@ -180,7 +180,7 @@ job "cw-auth" {
 
       service {
         name = "cw-auth-web-postgres"
-        port = "postgres"
+        port = ["web-db"]
 
         address_mode = "host"
 
@@ -216,7 +216,7 @@ job "cw-auth" {
 
       config {
         image = "postgres:latest"
-        ports = ["postgres"]
+        ports = ["hydra-db"]
         network_mode = "host"
 
         volumes = [

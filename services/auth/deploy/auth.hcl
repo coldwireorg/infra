@@ -72,6 +72,12 @@ job "cw-auth" {
 
       env {
         DSN = "postgresql://postgres:12345@${NOMAD_IP_hydra-db}:${NOMAD_PORT_hydra-db}/hydra"
+        SERVE_COOKIES_SAME_SITE_MODE="Lax"
+        URLS_LOGIN="https://auth.coldwire.org/sign-in"
+        URLS_CONSENT="https://auth.coldwire.org/api/consent"
+        URLS_LOGOUT="https://auth.coldwire.org/api/logout"
+        URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/sign-in"
+        URLS_SELF_ISSUER="https://auth.coldwire.org/"
       }
 
       config {
@@ -83,13 +89,7 @@ job "cw-auth" {
           "sql",
           "-e",
           "--yes",
-          "-c",
-          "/local/hydra.yaml"
         ]
-      }
-
-      artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
       }
     }
 
@@ -119,6 +119,12 @@ job "cw-auth" {
       env {
         DSN = "postgresql://postgres:12345@${NOMAD_IP_hydra-db}:${NOMAD_PORT_hydra-db}/"
         SECRETS_SYSTEM = "ThisIsJustASuperToken!"
+        SERVE_COOKIES_SAME_SITE_MODE="Lax"
+        URLS_LOGIN="https://auth.coldwire.org/sign-in"
+        URLS_CONSENT="https://auth.coldwire.org/api/consent"
+        URLS_LOGOUT="https://auth.coldwire.org/api/logout"
+        URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/sign-in"
+        URLS_SELF_ISSUER="https://auth.coldwire.org/"
       }
 
       config {
@@ -128,14 +134,8 @@ job "cw-auth" {
 
         command = "serve"
         args = [
-          "-c",
-          "/local/hydra.yaml",
           "all"
         ]
-      }
-
-      artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
       }
     }
 

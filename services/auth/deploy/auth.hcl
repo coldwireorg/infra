@@ -48,7 +48,7 @@ job "cw-auth" {
       }
 
       config {
-        image = "coldwireorg/auth:v0.0.1"
+        image = "coldwireorg/auth:v0.0.2"
         ports = ["http"]
         network_mode = "host"
       }
@@ -82,18 +82,23 @@ job "cw-auth" {
         ports = ["hydra-public", "hydra-admin"]
         network_mode = "host"
 
-        command = "/bin/sh"
-        args = ["-c", "/usr/bin/hydra migrate sql -e --yes -c /config/hydra.yaml && /usr/bin/hydra serve -c /config/hydra.yaml all"]
+        command = "/config/init.sh"
 
         volumes = [
           "/mnt/storage/services/auth/hydra/:/database/",
           "config/hydra.yaml:/config/hydra.yaml",
+          "local/init.sh:/config/init.sh",
         ]
       }
 
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
         destination = "config/"
+      }
+
+      artifact {
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/init.sh"
+        destination = "local/"
       }
     }
 

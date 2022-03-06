@@ -82,7 +82,7 @@ job "cw-auth" {
         ports = ["hydra-public", "hydra-admin"]
         network_mode = "host"
 
-        command = "bash"
+        command = "/bin/sh"
         args = ["-c", "/usr/bin/hydra migrate sql -e --yes -c /config/hydra.yaml && /usr/bin/hydra serve -c /config/hydra.yaml all"]
 
         volumes = [

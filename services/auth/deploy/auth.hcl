@@ -117,7 +117,7 @@ job "cw-auth" {
       }
 
       env {
-        DSN = "postgresql://postgres:12345@${NOMAD_IP_hydra-db}:${NOMAD_PORT_hydra-db}/"
+        DSN = "postgresql://postgres:12345@${NOMAD_IP_hydra-db}:${NOMAD_PORT_hydra-db}/hydra"
         SECRETS_SYSTEM = "ThisIsJustASuperToken!"
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
         URLS_LOGIN="https://auth.coldwire.org/sign-in"

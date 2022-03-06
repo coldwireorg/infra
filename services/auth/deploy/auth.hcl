@@ -83,18 +83,17 @@ job "cw-auth" {
           "sql",
           "-e",
           "--yes",
-          "-c /config/hydra.yaml"
+          "-c /local/hydra.yaml"
         ]
 
         volumes = [
-          "/mnt/storage/services/auth/hydra/:/database/",
-          "config/hydra.yaml:/config/hydra.yaml",
+          "local:/local/",
         ]
       }
 
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
-        destination = "config/"
+        destination = "local"
       }
     }
 
@@ -134,20 +133,18 @@ job "cw-auth" {
         command = "serve"
         args = [
           "-c",
-          "/config/hydra.yaml",
+          "/local/hydra.yaml",
           "all"
         ]
 
         volumes = [
-          "/mnt/storage/services/auth/hydra/db.sqlite:/database/db.sqlite",
-          "config/hydra.yaml:/config/hydra.yaml",
-          "local/init.sh:/config/init.sh",
+          "local:/local/",
         ]
       }
 
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/hydra.yaml"
-        destination = "config/"
+        destination = "local"
       }
     }
 

@@ -14,7 +14,10 @@ job "cw-auth" {
       port "hydra-admin" {
         to = 4445
       }
-      port "postgres" {
+      port "web-db" {
+        to = -1
+      }
+      port "hydra-db" {
         to = -1
       }
     }
@@ -49,7 +52,7 @@ job "cw-auth" {
         HYDRA_PUBLIC_URL = "https://auth.coldwire.org"
         HYDRA_ADMIN_URL = "${NOMAD_IP_hydra-admin}:${NOMAD_PORT_hydra-admin}"
 
-        DB_URL = "postgresql://postgres:12345@${NOMAD_IP_postgres}:${NOMAD_PORT_postgres}/auth"
+        DB_URL = "postgresql://postgres:12345@${NOMAD_IP_web-db}:${NOMAD_PORT_web-db}/auth"
       }
 
       config {
@@ -68,7 +71,7 @@ job "cw-auth" {
       }
 
       env {
-        DSN = "sqlite:///database/db.sqlite?_fk=true"
+        DSN = "postgresql://postgres:12345@${NOMAD_IP_hydra-db}:${NOMAD_PORT_hydra-db}/hydra"
       }
 
       config {
@@ -120,7 +123,7 @@ job "cw-auth" {
       }
 
       env {
-        DSN = "sqlite:///database/db.sqlite?_fk=true"
+        DSN = "postgresql://postgres:12345@${NOMAD_IP_hydra-db}:${NOMAD_PORT_hydra-db}/"
         SECRETS_SYSTEM = "ThisIsJustASuperToken!"
       }
 
@@ -149,7 +152,7 @@ job "cw-auth" {
       }
     }
 
-    task "database" {
+    task "web-db" {
       driver = "docker"
 
       lifecycle {
@@ -166,17 +169,17 @@ job "cw-auth" {
 
       config {
         image = "postgres:latest"
-        ports = ["postgres"]
+        ports = ["web-db"]
         network_mode = "host"
 
         volumes = [
-          "/mnt/storage/services/auth/database:/var/lib/postgresql/data",
+          "/mnt/storage/services/auth/web/database:/var/lib/postgresql/data",
           "local/tables.sql:/docker-entrypoint-initdb.d/tables.sql",
         ]
       }
 
       service {
-        name = "cw-auth-postgres"
+        name = "cw-auth-web-postgres"
         port = "postgres"
 
         address_mode = "host"
@@ -193,6 +196,47 @@ job "cw-auth" {
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/tables.sql"
         destination = "local/"
+      }
+    }
+
+    task "hydra-db" {
+      driver = "docker"
+
+      lifecycle {
+        hook = "prestart"
+        sidecar = true
+      }
+
+      env {
+        POSTGRES_USER = "postgres"
+        POSTGRES_PASSWORD = "12345"
+        POSTGRES_DB = "hydra"
+        PGPORT = "${NOMAD_PORT_hydra-db}"
+      }
+
+      config {
+        image = "postgres:latest"
+        ports = ["postgres"]
+        network_mode = "host"
+
+        volumes = [
+          "/mnt/storage/services/auth/hydra/database:/var/lib/postgresql/data",
+        ]
+      }
+
+      service {
+        name = "cw-auth-hydra-postgres"
+        port = "hydra-db"
+
+        address_mode = "host"
+
+        check {
+          type     = "script"
+          command = "pg_isready"
+          args = ["-q", "-d", "postgres", "-U", "postgres"]
+          interval = "10s"
+          timeout  = "45s"
+        }
       }
     }
   }

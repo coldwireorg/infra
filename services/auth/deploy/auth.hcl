@@ -110,7 +110,7 @@ job "cw-auth" {
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.cw-auth-hydra.rule=(Host(`auth.coldwire.org`) && PathPrefix(`/oauth`))",
+          "traefik.http.routers.cw-auth-hydra.rule=((Host(`auth.coldwire.org`) && PathPrefix(`/oauth2`)) || (Host(`auth.coldwire.org`) && PathPrefix(`/.well-known/openid-configuration`)))",
           "traefik.http.routers.cw-auth-hydra.tls=true",
           "traefik.http.routers.cw-auth-hydra.tls.certresolver=coldwire",
           "traefik.http.routers.cw-auth-hydra.loadbalancer.server.port=${NOMAD_PORT_hydra-public}",

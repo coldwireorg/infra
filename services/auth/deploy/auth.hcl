@@ -140,6 +140,7 @@ job "cw-auth" {
         args = [
           "all",
           "--sqa-opt-out",
+          "--dangerous-force-http",
         ]
       }
     }

@@ -82,7 +82,11 @@ job "cw-auth" {
         ports = ["hydra-public", "hydra-admin"]
         network_mode = "host"
 
-        command = "/config/init.sh"
+        command = "sh"
+        args = [
+          "-c"
+          "/config/init.sh"
+        ]
 
         volumes = [
           "/mnt/storage/services/auth/hydra/:/database/",

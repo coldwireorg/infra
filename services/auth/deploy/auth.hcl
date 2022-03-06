@@ -66,7 +66,7 @@ job "cw-auth" {
       driver = "docker"
 
       lifecycle {
-        hook = "prestart"
+        hook = "poststart"
         sidecar = false
       }
 
@@ -89,7 +89,6 @@ job "cw-auth" {
         volumes = [
           "/mnt/storage/services/auth/hydra/:/database/",
           "config/hydra.yaml:/config/hydra.yaml",
-          "local/init.sh:/config/init.sh",
         ]
       }
 

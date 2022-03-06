@@ -72,6 +72,7 @@ job "cw-auth" {
 
       env {
         DSN = "postgres://postgres:12345@${NOMAD_IP_hydra-db}:${NOMAD_PORT_hydra-db}/hydra"
+        SECRETS_SYSTEM="ThisIsJustASuperToken!"
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
         URLS_LOGIN="https://auth.coldwire.org/sign-in"
         URLS_CONSENT="https://auth.coldwire.org/api/consent"
@@ -118,7 +119,7 @@ job "cw-auth" {
 
       env {
         DSN = "postgres://postgres:12345@${NOMAD_IP_hydra-db}:${NOMAD_PORT_hydra-db}/hydra"
-        SECRETS_SYSTEM = "ThisIsJustASuperToken!"
+        SECRETS_SYSTEM="ThisIsJustASuperToken!"
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
         URLS_LOGIN="https://auth.coldwire.org/sign-in"
         URLS_CONSENT="https://auth.coldwire.org/api/consent"
@@ -134,7 +135,8 @@ job "cw-auth" {
 
         command = "serve"
         args = [
-          "all"
+          "all",
+          "--sqa-opt-out",
         ]
       }
     }

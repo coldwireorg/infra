@@ -49,7 +49,7 @@ job "cw-auth" {
         SERVER_PORT ="${NOMAD_PORT_http}"
 
         AUTH_SERVER_URL = "https://auth.coldwire.org"
-        HYDRA_PUBLIC_URL = "https://auth.coldwire.org"
+        HYDRA_PUBLIC_URL = "https://auth.coldwire.org/"
         HYDRA_ADMIN_URL = "${NOMAD_IP_hydra-admin}:${NOMAD_PORT_hydra-admin}"
 
         DB_URL = "postgresql://postgres:12345@${NOMAD_IP_web-db}:${NOMAD_PORT_web-db}/auth"

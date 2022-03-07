@@ -23,6 +23,11 @@ job "cw-auth" {
       }
     }
 
+    restart {
+      attempts = 15
+      delay    = "30s"
+    }
+
     task "cw-auth-web-server" {
       driver = "docker"
 

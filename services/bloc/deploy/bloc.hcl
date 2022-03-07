@@ -41,7 +41,7 @@ job "cw-bloc" {
 
       config {
         image = "coldwireorg/bloc-frontend:v0.1.4"
-        ports = ["http"]
+        ports = ["cw-bloc-front-server"]
         network_mode = "host"
       }
     }

@@ -1,28 +1,27 @@
-job "coldwire-website" {
+job "cw-website" {
   datacenters = ["dc1", "coldnet"]
   priority = 60
 
-  group "website" {
+  group "cw-website-server" {
     count = 4
 
     network {
-      port "http" {
+      port "cw-website-server" {
         to = -1
       }
     }
 
     service {
-      name = "website"
-      port = "http"
+      name = "cw-website-server"
+      port = "cw-website-server"
 
       address_mode = "host"
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.http.rule=Host(`coldwire.org`)",
-        "traefik.http.routers.cw-website.rule=Host(`coldwire.org`)",
-        "traefik.http.routers.cw-website.tls=true",
-        "traefik.http.routers.cw-website.tls.certresolver=coldwire",
+        "traefik.http.routers.cw-website-server.rule=Host(`coldwire.org`)",
+        "traefik.http.routers.cw-website-server.tls=true",
+        "traefik.http.routers.cw-website-server.tls.certresolver=coldwire",
       ]
 
       check {
@@ -33,9 +32,9 @@ job "coldwire-website" {
       }
     }
 
-    task "website" {
+    task "cw-website-server" {
       env {
-        SERVER_PORT = "${NOMAD_PORT_http}"
+        SERVER_PORT = "${NOMAD_PORT_cw-website-server}"
       }
 
       driver = "docker"

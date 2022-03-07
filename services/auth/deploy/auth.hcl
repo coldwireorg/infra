@@ -5,24 +5,25 @@ job "cw-auth" {
     count = 1
 
     network {
-      port "http" {
+      port "cw-auth-web-server" {
         to = -1
       }
-      port "hydra-public" {
+      port "cw-auth-web-database" {
         to = -1
       }
-      port "hydra-admin" {
+
+      port "cw-auth-hydra-public" {
         to = -1
       }
-      port "web-db" {
+      port "cw-auth-hydra-admin" {
         to = -1
       }
-      port "hydra-db" {
+      port "cw-auth-hydra-database" {
         to = -1
       }
     }
 
-    task "web" {
+    task "cw-auth-web-server" {
       driver = "docker"
 
       lifecycle {
@@ -31,28 +32,28 @@ job "cw-auth" {
       }
 
       service {
-        name = "cw-auth-web"
-        port = "http"
+        name = "cw-auth-web-server"
+        port = "cw-auth-web-server"
 
         address_mode = "host"
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.cw-auth-web.rule=Host(`auth.coldwire.org`)",
-          "traefik.http.routers.cw-auth-web.tls=true",
-          "traefik.http.routers.cw-auth-web.tls.certresolver=coldwire",
+          "traefik.http.routers.cw-auth-web-server.rule=Host(`auth.coldwire.org`)",
+          "traefik.http.routers.cw-auth-web-server.tls=true",
+          "traefik.http.routers.cw-auth-web-server.tls.certresolver=coldwire",
         ]
       }
 
       env {
         DOMAIN = "auth.coldwire.org"
-        SERVER_PORT ="${NOMAD_PORT_http}"
+        SERVER_PORT ="${NOMAD_PORT_cw-auth-web-server}"
 
         AUTH_SERVER_URL = "https://auth.coldwire.org"
         HYDRA_PUBLIC_URL = "https://auth.coldwire.org/"
-        HYDRA_ADMIN_URL = "${NOMAD_IP_hydra-admin}:${NOMAD_PORT_hydra-admin}"
+        HYDRA_ADMIN_URL = "${NOMAD_IP_cw-auth-hydra-admin}:${NOMAD_PORT_cw-auth-hydra-admin}"
 
-        DB_URL = "postgresql://postgres:12345@${NOMAD_IP_web-db}:${NOMAD_PORT_web-db}/auth"
+        DB_URL = "postgresql://postgres:12345@${NOMAD_IP_cw-auth-web-database}:${NOMAD_PORT_cw-auth-web-database}/auth"
       }
 
       config {
@@ -62,7 +63,7 @@ job "cw-auth" {
       }
     }
 
-    task "hydra-migrate" {
+    task "cw-auth-hydra-migrate" {
       driver = "docker"
 
       lifecycle {
@@ -71,11 +72,11 @@ job "cw-auth" {
       }
 
       env {
-        DSN = "postgres://postgres:12345@${NOMAD_IP_hydra-db}:${NOMAD_PORT_hydra-db}/hydra"
+        DSN = "postgres://postgres:12345@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
         SECRETS_SYSTEM="ThisIsJustASuperToken!"
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
-        SERVE_ADMIN_PORT="${NOMAD_PORT_hydra-admin}"
-        SERVE_PUBLIC_PORT="${NOMAD_PORT_hydra-public}"
+        SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
+        SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
         URLS_LOGIN="https://auth.coldwire.org/sign-in"
         URLS_CONSENT="https://auth.coldwire.org/api/consent"
         URLS_LOGOUT="https://auth.coldwire.org/api/logout"
@@ -96,7 +97,7 @@ job "cw-auth" {
       }
     }
 
-    task "hydra" {
+    task "cw-auth-hydra-server" {
       driver = "docker"
 
       lifecycle {
@@ -105,8 +106,8 @@ job "cw-auth" {
       }
 
       service {
-        name = "cw-auth-hydra"
-        port = "hydra-public"
+        name = "cw-auth-hydra-server"
+        port = "cw-auth-hydra-public"
 
         address_mode = "host"
 
@@ -119,11 +120,11 @@ job "cw-auth" {
       }
 
       env {
-        DSN = "postgres://postgres:12345@${NOMAD_IP_hydra-db}:${NOMAD_PORT_hydra-db}/hydra"
+        DSN = "postgres://postgres:12345@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
         SECRETS_SYSTEM="ThisIsJustASuperToken!"
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
-        SERVE_ADMIN_PORT="${NOMAD_PORT_hydra-admin}"
-        SERVE_PUBLIC_PORT="${NOMAD_PORT_hydra-public}"
+        SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
+        SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
         URLS_LOGIN="https://auth.coldwire.org/sign-in"
         URLS_CONSENT="https://auth.coldwire.org/api/consent"
         URLS_LOGOUT="https://auth.coldwire.org/api/logout"
@@ -133,7 +134,7 @@ job "cw-auth" {
 
       config {
         image = "oryd/hydra:v1.11.7"
-        ports = ["hydra-public", "hydra-admin"]
+        ports = ["cw-auth-hydra-public", "cw-auth-hydra-admin"]
         network_mode = "host"
 
         command = "serve"
@@ -145,7 +146,7 @@ job "cw-auth" {
       }
     }
 
-    task "web-db" {
+    task "cw-auth-web-database" {
       driver = "docker"
 
       lifecycle {
@@ -157,12 +158,12 @@ job "cw-auth" {
         POSTGRES_USER = "postgres"
         POSTGRES_PASSWORD = "12345"
         POSTGRES_DB = "auth"
-        PGPORT = "${NOMAD_PORT_web-db}"
+        PGPORT = "${NOMAD_PORT_cw-auth-web-database}"
       }
 
       config {
         image = "postgres:latest"
-        ports = ["web-db"]
+        ports = ["cw-auth-web-database"]
         network_mode = "host"
 
         volumes = [
@@ -172,8 +173,8 @@ job "cw-auth" {
       }
 
       service {
-        name = "cw-auth-web-postgres"
-        port = "web-db"
+        name = "cw-auth-web-database"
+        port = "cw-auth-web-database"
 
         address_mode = "host"
 
@@ -192,7 +193,7 @@ job "cw-auth" {
       }
     }
 
-    task "hydra-db" {
+    task "cw-auth-hydra-database" {
       driver = "docker"
 
       lifecycle {
@@ -204,12 +205,12 @@ job "cw-auth" {
         POSTGRES_USER = "postgres"
         POSTGRES_PASSWORD = "12345"
         POSTGRES_DB = "hydra"
-        PGPORT = "${NOMAD_PORT_hydra-db}"
+        PGPORT = "${NOMAD_PORT_cw-auth-hydra-database}"
       }
 
       config {
         image = "postgres:latest"
-        ports = ["hydra-db"]
+        ports = ["cw-auth-hydra-database"]
         network_mode = "host"
 
         volumes = [
@@ -218,8 +219,8 @@ job "cw-auth" {
       }
 
       service {
-        name = "cw-auth-hydra-postgres"
-        port = "hydra-db"
+        name = "cw-auth-hydra-database"
+        port = "cw-auth-hydra-database"
 
         address_mode = "host"
 

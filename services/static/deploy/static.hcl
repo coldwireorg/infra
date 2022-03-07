@@ -6,22 +6,22 @@ job "cw-static" {
     count = 4
 
     network {
-      port "http" {
+      port "cw-static-server" {
         to = -1
       }
     }
 
     service {
       name = "cw-static-server"
-      port = "http"
+      port = "cw-static-server"
 
       address_mode = "host"
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.cw-static.rule=Host(`static.coldwire.org`)",
-        "traefik.http.routers.cw-static.tls=true",
-        "traefik.http.routers.cw-static.tls.certresolver=coldwire",
+        "traefik.http.routers.cw-static-server.rule=Host(`static.coldwire.org`)",
+        "traefik.http.routers.cw-static-server.tls=true",
+        "traefik.http.routers.cw-static-server.tls.certresolver=coldwire",
       ]
 
       check {
@@ -34,14 +34,14 @@ job "cw-static" {
 
     task "cw-static-server" {
       env {
-        SERVER_PORT = "${NOMAD_PORT_http}"
+        SERVER_PORT = "${NOMAD_PORT_cw-static-server}"
       }
 
       driver = "docker"
 
       config {
         image = "coldwireorg/static:v0.0.3"
-        ports = ["http"]
+        ports = ["cw-static-server"]
         network_mode = "host"
 
         volumes = [

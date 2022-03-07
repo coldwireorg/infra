@@ -1,28 +1,27 @@
-job "bloc" {
+job "cw-bloc" {
   datacenters = ["dc1", "coldnet"]
   priotity = 80
 
-  group "bloc-front" {
+  group "cw-bloc-front" {
     count = 2
 
     network {
-      port "http" {
+      port "cw-bloc-front-server" {
         to = -1
       }
     }
 
     service {
-      name = "bloc-frontend"
-      port = "http"
+      name = "cw-bloc-front"
+      port = "cw-bloc-front-server"
 
       address_mode = "host"
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.blocfrontend.rule=Host(`bloc.coldwire.org`)",
-        "traefik.http.routers.cw-bloc-front.rule=Host(`bloc.coldwire.org`)",
-        "traefik.http.routers.cw-bloc-front.tls=true",
-        "traefik.http.routers.cw-bloc-front.tls.certresolver=coldwire",
+        "traefik.http.routers.cw-bloc-front-server.rule=Host(`bloc.coldwire.org`)",
+        "traefik.http.routers.cw-bloc-front-server.tls=true",
+        "traefik.http.routers.cw-bloc-front-server.tls.certresolver=coldwire",
 
       ]
 
@@ -34,11 +33,11 @@ job "bloc" {
       }
     }
 
-    task "frontend" {
+    task "cw-bloc-front-server" {
       driver = "docker"
 
       env {
-        PORT = "${NOMAD_PORT_http}"
+        PORT = "${NOMAD_PORT_cw-bloc-front-server}"
       }
 
       config {
@@ -49,40 +48,39 @@ job "bloc" {
     }
   }
 
-  group "bloc-backend" {
+  group "cw-bloc-back-server" {
     count = 1
 
     network {
-      port "http" {
+      port "cw-bloc-back-server" {
         to = -1
       }
-      port "postgres" {
-        to = 5432
+      port "cw-bloc-back-database" {
+        to = -1
       }
     }
 
-    task "backend" {
+    task "cw-bloc-back-server" {
       driver = "docker"
 
       service {
-        name = "bloc-backend"
-        port = "http"
+        name = "cw-bloc-back-server"
+        port = "cw-bloc-back-server"
 
         address_mode = "host"
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.blocbackend.rule=(Host(`bloc.coldwire.org`) && PathPrefix(`/api`))",
-          "traefik.http.routers.cw-bloc-back.rule=(Host(`bloc.coldwire.org`) && PathPrefix(`/api`))",
-          "traefik.http.routers.cw-bloc-back.tls=true",
-          "traefik.http.routers.cw-bloc-back.tls.certresolver=coldwire",
+          "traefik.http.routers.cw-bloc-back-server.rule=(Host(`bloc.coldwire.org`) && PathPrefix(`/api`))",
+          "traefik.http.routers.cw-bloc-back-server.tls=true",
+          "traefik.http.routers.cw-cw-bloc-back-server.certresolver=coldwire",
           "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=30746254628"
         ]
       }
 
       env {
-        SERVER_PORT = "${NOMAD_PORT_http}"
-        DB_URL = "postgresql://${NOMAD_IP_postgres}:${NOMAD_PORT_postgres}/bloc?user=postgres&password=12345"
+        SERVER_PORT = "${NOMAD_PORT_cw-bloc-back-server}"
+        DB_URL = "postgresql://${NOMAD_IP_cw-bloc-back-database}:${NOMAD_PORT_cw-bloc-back-database}/bloc?user=postgres&password=12345"
         STORAGE_DIR = "/storage"
         SERVER_DOMAIN = "coldwire.org"
         SERVER_HTTPS = true
@@ -91,7 +89,7 @@ job "bloc" {
 
       config {
         image = "coldwireorg/bloc-backend:v0.1.1"
-        ports = ["http"]
+        ports = ["cw-bloc-back-server"]
         network_mode = "host"
 
         volumes = [
@@ -100,7 +98,7 @@ job "bloc" {
       }
     }
 
-    task "database" {
+    task "cw-bloc-back-database" {
       driver = "docker"
 
       lifecycle {
@@ -111,23 +109,24 @@ job "bloc" {
       env {
         POSTGRES_USER = "postgres"
         POSTGRES_PASSWORD = "12345"
-        POSTGRES_DB = "bloc" 
+        POSTGRES_DB = "bloc"
+        PGPORT = "${NOMAD_PORT_cw-bloc-back-database}"
       }
 
       config {
         image = "postgres:latest"
-        ports = ["postgres"]
+        ports = ["cw-bloc-back-database"]
         network_mode = "host"
 
         volumes = [
           "/mnt/storage/services/bloc/database:/var/lib/postgresql/data",
-          "/local/:/docker-entrypoint-initdb.d/",
+          "local/tables.sql:/docker-entrypoint-initdb.d/tables.sql",
         ]
       }
 
       service {
-        name = "postgresql"
-        port = "postgres"
+        name = "cw-bloc-back-database"
+        port = "cw-bloc-back-database"
 
         address_mode = "host"
 
@@ -138,11 +137,6 @@ job "bloc" {
           interval = "10s"
           timeout  = "45s"
         }
-      }
-
-      artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/bloc/config/init.sh"
-        destination = "local/"
       }
 
       artifact {

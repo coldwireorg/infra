@@ -1,8 +1,8 @@
-job "coldwire-static" {
+job "cw-static" {
   datacenters = ["dc1", "coldnet"]
   priority = 60
 
-  group "static" {
+  group "cw-static-server" {
     count = 4
 
     network {
@@ -12,7 +12,7 @@ job "coldwire-static" {
     }
 
     service {
-      name = "static"
+      name = "cw-static-server"
       port = "http"
 
       address_mode = "host"
@@ -32,7 +32,7 @@ job "coldwire-static" {
       }
     }
 
-    task "static" {
+    task "cw-static-server" {
       env {
         SERVER_PORT = "${NOMAD_PORT_http}"
       }
@@ -40,9 +40,13 @@ job "coldwire-static" {
       driver = "docker"
 
       config {
-        image = "coldwireorg/static:v0.0.2"
+        image = "coldwireorg/static:v0.0.3"
         ports = ["http"]
         network_mode = "host"
+
+        volumes = [
+          "/mnt/storage/services/static/:/static",
+        ]
       }
     }
   }

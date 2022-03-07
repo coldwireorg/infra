@@ -59,6 +59,11 @@ job "cw-bloc" {
       }
     }
 
+    restart {
+      attempts = 30
+      delay    = "15s"
+    }
+
     task "cw-bloc-back-server" {
       driver = "docker"
 

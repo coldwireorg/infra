@@ -24,8 +24,8 @@ job "cw-auth" {
     }
 
     restart {
-      attempts = 15
-      delay    = "30s"
+      attempts = 30
+      delay    = "15s"
     }
 
     task "cw-auth-web-server" {

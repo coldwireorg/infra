@@ -26,11 +26,6 @@ job "cw-auth" {
     task "cw-auth-web-server" {
       driver = "docker"
 
-      lifecycle {
-        hook = "poststart"
-        sidecar = false
-      }
-
       service {
         name = "cw-auth-web-server"
         port = "cw-auth-web-server"
@@ -62,90 +57,7 @@ job "cw-auth" {
         network_mode = "host"
       }
     }
-
-    task "cw-auth-hydra-migrate" {
-      driver = "docker"
-
-      lifecycle {
-        hook = "poststart"
-        sidecar = false
-      }
-
-      env {
-        DSN = "postgres://postgres:12345@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
-        SECRETS_SYSTEM="ThisIsJustASuperToken!"
-        SERVE_COOKIES_SAME_SITE_MODE="Lax"
-        SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
-        SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
-        URLS_LOGIN="https://auth.coldwire.org/sign-in"
-        URLS_CONSENT="https://auth.coldwire.org/api/consent"
-        URLS_LOGOUT="https://auth.coldwire.org/api/logout"
-        URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/sign-in"
-        URLS_SELF_ISSUER="https://auth.coldwire.org/"
-      }
-
-      config {
-        image = "oryd/hydra:v1.11.7"
-        network_mode = "host"
-
-        command = "migrate"
-        args = [
-          "sql",
-          "-e",
-          "--yes",
-        ]
-      }
-    }
-
-    task "cw-auth-hydra-server" {
-      driver = "docker"
-
-      lifecycle {
-        hook = "poststart"
-        sidecar = false
-      }
-
-      service {
-        name = "cw-auth-hydra-server"
-        port = "cw-auth-hydra-public"
-
-        address_mode = "host"
-
-        tags = [       
-          "traefik.enable=true",
-          "traefik.http.routers.cw-auth-hydra.rule=Host(`auth.coldwire.org`) && (PathPrefix(`/oauth2`) || PathPrefix(`/.well-known`) || PathPrefix(`/userinfo`))",
-          "traefik.http.routers.cw-auth-hydra.tls=true",
-          "traefik.http.routers.cw-auth-hydra.tls.certresolver=coldwire",
-        ]
-      }
-
-      env {
-        DSN = "postgres://postgres:12345@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
-        SECRETS_SYSTEM="ThisIsJustASuperToken!"
-        SERVE_COOKIES_SAME_SITE_MODE="Lax"
-        SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
-        SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
-        URLS_LOGIN="https://auth.coldwire.org/sign-in"
-        URLS_CONSENT="https://auth.coldwire.org/api/consent"
-        URLS_LOGOUT="https://auth.coldwire.org/api/logout"
-        URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/sign-in"
-        URLS_SELF_ISSUER="https://auth.coldwire.org"
-      }
-
-      config {
-        image = "oryd/hydra:v1.11.7"
-        ports = ["cw-auth-hydra-public", "cw-auth-hydra-admin"]
-        network_mode = "host"
-
-        command = "serve"
-        args = [
-          "all",
-          "--sqa-opt-out",
-          "--dangerous-force-http",
-        ]
-      }
-    }
-
+    
     task "cw-auth-web-database" {
       driver = "docker"
 
@@ -190,6 +102,84 @@ job "cw-auth" {
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/tables.sql"
         destination = "local/"
+      }
+    }
+
+    task "cw-auth-hydra-server" {
+      driver = "docker"
+
+      service {
+        name = "cw-auth-hydra-server"
+        port = "cw-auth-hydra-public"
+
+        address_mode = "host"
+
+        tags = [       
+          "traefik.enable=true",
+          "traefik.http.routers.cw-auth-hydra.rule=Host(`auth.coldwire.org`) && (PathPrefix(`/oauth2`) || PathPrefix(`/.well-known`) || PathPrefix(`/userinfo`))",
+          "traefik.http.routers.cw-auth-hydra.tls=true",
+          "traefik.http.routers.cw-auth-hydra.tls.certresolver=coldwire",
+        ]
+      }
+
+      env {
+        DSN = "postgres://postgres:12345@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
+        SECRETS_SYSTEM="ThisIsJustASuperToken!"
+        SERVE_COOKIES_SAME_SITE_MODE="Lax"
+        SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
+        SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
+        URLS_LOGIN="https://auth.coldwire.org/sign-in"
+        URLS_CONSENT="https://auth.coldwire.org/api/consent"
+        URLS_LOGOUT="https://auth.coldwire.org/api/logout"
+        URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/sign-in"
+        URLS_SELF_ISSUER="https://auth.coldwire.org"
+      }
+
+      config {
+        image = "oryd/hydra:v1.11.7"
+        ports = ["cw-auth-hydra-public", "cw-auth-hydra-admin"]
+        network_mode = "host"
+
+        command = "serve"
+        args = [
+          "all",
+          "--sqa-opt-out",
+          "--dangerous-force-http",
+        ]
+      }
+    }
+
+    task "cw-auth-hydra-migrate" {
+      driver = "docker"
+
+      lifecycle {
+        hook = "prestart"
+        sidecar = false
+      }
+
+      env {
+        DSN = "postgres://postgres:12345@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
+        SECRETS_SYSTEM="ThisIsJustASuperToken!"
+        SERVE_COOKIES_SAME_SITE_MODE="Lax"
+        SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
+        SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
+        URLS_LOGIN="https://auth.coldwire.org/sign-in"
+        URLS_CONSENT="https://auth.coldwire.org/api/consent"
+        URLS_LOGOUT="https://auth.coldwire.org/api/logout"
+        URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/sign-in"
+        URLS_SELF_ISSUER="https://auth.coldwire.org/"
+      }
+
+      config {
+        image = "oryd/hydra:v1.11.7"
+        network_mode = "host"
+
+        command = "migrate"
+        args = [
+          "sql",
+          "-e",
+          "--yes",
+        ]
       }
     }
 

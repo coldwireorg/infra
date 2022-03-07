@@ -26,6 +26,10 @@ job "cw-auth" {
     task "cw-auth-web-server" {
       driver = "docker"
 
+      lifecycle {
+        hook = "poststart"
+      }
+
       service {
         name = "cw-auth-web-server"
         port = "cw-auth-web-server"
@@ -95,7 +99,7 @@ job "cw-auth" {
           command = "pg_isready"
           args = ["-q", "-d", "postgres", "-U", "postgres"]
           interval = "10s"
-          timeout  = "45s"
+          timeout  = "120s"
         }
       }
       
@@ -107,6 +111,10 @@ job "cw-auth" {
 
     task "cw-auth-hydra-server" {
       driver = "docker"
+
+      lifecycle {
+        hook = "poststart"
+      }
 
       service {
         name = "cw-auth-hydra-server"
@@ -218,7 +226,7 @@ job "cw-auth" {
           command = "pg_isready"
           args = ["-q", "-d", "postgres", "-U", "postgres"]
           interval = "10s"
-          timeout  = "45s"
+          timeout  = "120s"
         }
       }
     }

@@ -134,7 +134,7 @@ job "cw-bloc" {
           command = "pg_isready"
           args = ["-q", "-d", "postgres", "-U", "postgres"]
           interval = "10s"
-          timeout  = "45s"
+          timeout  = "120s"
         }
       }
 

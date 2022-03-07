@@ -41,7 +41,7 @@ job "cw-website" {
 
       config {
         image = "coldwireorg/website:v0.0.8"
-        ports = ["http"]
+        ports = ["cw-website-server"]
         network_mode = "host"
       }
     }

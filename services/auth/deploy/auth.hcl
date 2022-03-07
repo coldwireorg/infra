@@ -26,10 +26,6 @@ job "cw-auth" {
     task "cw-auth-web-server" {
       driver = "docker"
 
-      lifecycle {
-        hook = "poststart"
-      }
-
       service {
         name = "cw-auth-web-server"
         port = "cw-auth-web-server"
@@ -71,19 +67,19 @@ job "cw-auth" {
       }
 
       env {
-        POSTGRESQL_USERNAME = "postgres"
-        POSTGRESQL_PASSWORD = "12345"
-        POSTGRESQL_DATABASE = "auth"
-        POSTGRESQL_PORT_NUMBER = "${NOMAD_PORT_cw-auth-web-database}"
+        POSTGRES_USER = "postgres"
+        POSTGRES_PASSWORD = "12345"
+        POSTGRES_DB = "auth"
+        PGPORT = "${NOMAD_PORT_cw-auth-web-database}"
       }
 
       config {
-        image = "bitnami/postgresql:latest"
+        image = "postgres:latest"
         ports = ["cw-auth-web-database"]
         network_mode = "host"
 
         volumes = [
-          "/mnt/storage/services/auth/web/database:/bitnami/postgresql",
+          "/mnt/storage/services/auth/web/database:/var/lib/postgresql/data",
           "local/tables.sql:/docker-entrypoint-initdb.d/tables.sql",
         ]
       }
@@ -111,10 +107,6 @@ job "cw-auth" {
 
     task "cw-auth-hydra-server" {
       driver = "docker"
-
-      lifecycle {
-        hook = "poststart"
-      }
 
       service {
         name = "cw-auth-hydra-server"
@@ -199,19 +191,19 @@ job "cw-auth" {
       }
 
       env {
-        POSTGRESQL_USERNAME = "postgres"
-        POSTGRESQL_PASSWORD = "12345"
-        POSTGRESQL_DATABASE = "hydra"
-        POSTGRESQL_PORT_NUMBER = "${NOMAD_PORT_cw-auth-hydra-database}"
+        POSTGRES_USER = "postgres"
+        POSTGRES_PASSWORD = "12345"
+        POSTGRES_DB = "hydra"
+        PGPORT = "${NOMAD_PORT_cw-auth-hydra-database}"
       }
 
       config {
-        image = "bitnami/postgresql:latest"
+        image = "postgres:latest"
         ports = ["cw-auth-hydra-database"]
         network_mode = "host"
 
         volumes = [
-          "/mnt/storage/services/auth/hydra/database:/bitnami/postgresql",
+          "/mnt/storage/services/auth/hydra/database:/var/lib/postgresql/data",
         ]
       }
 

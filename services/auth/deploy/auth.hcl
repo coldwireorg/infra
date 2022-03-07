@@ -71,19 +71,19 @@ job "cw-auth" {
       }
 
       env {
-        POSTGRES_USER = "postgres"
-        POSTGRES_PASSWORD = "12345"
-        POSTGRES_DB = "auth"
-        PGPORT = "${NOMAD_PORT_cw-auth-web-database}"
+        POSTGRESQL_USERNAME = "postgres"
+        POSTGRESQL_PASSWORD = "12345"
+        POSTGRESQL_DATABASE = "auth"
+        POSTGRESQL_PORT_NUMBER = "${NOMAD_PORT_cw-auth-web-database}"
       }
 
       config {
-        image = "postgres:latest"
+        image = "bitnami/postgresql:latest"
         ports = ["cw-auth-web-database"]
         network_mode = "host"
 
         volumes = [
-          "/mnt/storage/services/auth/web/database:/var/lib/postgresql/data",
+          "/mnt/storage/services/auth/web/database:/bitnami/postgresql",
           "local/tables.sql:/docker-entrypoint-initdb.d/tables.sql",
         ]
       }
@@ -199,19 +199,19 @@ job "cw-auth" {
       }
 
       env {
-        POSTGRES_USER = "postgres"
-        POSTGRES_PASSWORD = "12345"
-        POSTGRES_DB = "hydra"
-        PGPORT = "${NOMAD_PORT_cw-auth-hydra-database}"
+        POSTGRESQL_USERNAME = "postgres"
+        POSTGRESQL_PASSWORD = "12345"
+        POSTGRESQL_DATABASE = "hydra"
+        POSTGRESQL_PORT_NUMBER = "${NOMAD_PORT_cw-auth-hydra-database}"
       }
 
       config {
-        image = "postgres:latest"
+        image = "bitnami/postgresql:latest"
         ports = ["cw-auth-hydra-database"]
         network_mode = "host"
 
         volumes = [
-          "/mnt/storage/services/auth/hydra/database:/var/lib/postgresql/data",
+          "/mnt/storage/services/auth/hydra/database:/bitnami/postgresql",
         ]
       }
 

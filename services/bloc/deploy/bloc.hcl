@@ -1,6 +1,5 @@
 job "cw-bloc" {
   datacenters = ["dc1", "coldnet"]
-  priotity = 80
 
   group "cw-bloc-front" {
     count = 2

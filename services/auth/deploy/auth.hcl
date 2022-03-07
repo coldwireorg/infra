@@ -158,6 +158,7 @@ job "cw-auth" {
       driver = "docker"
 
       lifecycle {
+        hook = "prestart"
         sidecar = false
       }
 

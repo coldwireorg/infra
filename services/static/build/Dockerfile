@@ -8,5 +8,4 @@ RUN go build -a -o /tmp/static/main .
 
 FROM scratch
 COPY --from=builder /tmp/static/main /main
-COPY --from=builder /tmp/static/static /static
 ENTRYPOINT ["/main"]

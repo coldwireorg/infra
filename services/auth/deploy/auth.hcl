@@ -30,8 +30,8 @@ job "cw-auth" {
 
     template {
       data = <<EOF
-        {{ with secret "services/hydra" }}
-        SECRETS_SYSTEM="{{ .Data.system }}"
+        {{ with secret "services/data/hydra" }}
+        SECRETS_SYSTEM="{{ .Data.data.system }}"
         {{ end }}
       EOF
 

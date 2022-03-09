@@ -129,7 +129,6 @@ job "cw-auth" {
 
       env {
         DSN = "postgres://postgres:12345@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
-        SECRETS_SYSTEM="{{ with secret "services/hydra" }}{{ .Data.data.system }}{{end}}"
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
         SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
         SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
@@ -138,6 +137,17 @@ job "cw-auth" {
         URLS_LOGOUT="https://auth.coldwire.org/api/logout"
         URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/sign-in"
         URLS_SELF_ISSUER="https://auth.coldwire.org"
+      }
+
+      template {
+        data = <<EOF
+          {{ with secret "services/hydra" }}
+          SECRETS_SYSTEM="{{ .Data.system }}"
+          {{ end }}
+        EOF
+
+        destination = "secrets/vault.env"
+        env         = true
       }
 
       config {
@@ -155,6 +165,8 @@ job "cw-auth" {
 
       vault {
         policies = ["hydra"]
+        change_mode   = "signal"
+        change_signal = "SIGHUP"
       }
     }
 

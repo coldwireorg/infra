@@ -63,7 +63,7 @@ job "cw-auth" {
       template {
         data = <<EOF
           {{ with secret "services/cw-auth" }}
-          DB_URL = "postgresql://postgres:{{ .Data "web-db-password" }}@${NOMAD_IP_cw-auth-web-database}:${NOMAD_PORT_cw-auth-web-database}/auth"
+          DB_URL = "postgresql://postgres:{{ index .Data "web-db-password" }}@${NOMAD_IP_cw-auth-web-database}:${NOMAD_PORT_cw-auth-web-database}/auth"
           {{ end }}
         EOF
 
@@ -126,7 +126,7 @@ job "cw-auth" {
       template {
         data = <<EOF
           {{ with secret "services/cw-auth" }}
-          POSTGRES_PASSWORD = {{ .Data "web-db-password" }}
+          POSTGRES_PASSWORD = {{ index .Data "web-db-password" }}
           {{ end }}
         EOF
 
@@ -185,8 +185,8 @@ job "cw-auth" {
       template {
         data = <<EOF
           {{ with secret "services/cw-auth" }}
-          SECRETS_SYSTEM="{{ .Data "hydra-server-secret" }}"
-          DSN = "postgres://postgres:{{ .Data "hydra-db-password" }}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
+          SECRETS_SYSTEM="{{ index .Data "hydra-server-secret" }}"
+          DSN = "postgres://postgres:{{ index .Data "hydra-db-password" }}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
           {{ end }}
         EOF
 
@@ -235,8 +235,8 @@ job "cw-auth" {
       template {
         data = <<EOF
           {{ with secret "services/cw-auth" }}
-          SECRETS_SYSTEM="{{ .Data "hydra-server-secret" }}"
-          DSN = "postgres://postgres:{{ .Data "hydra-db-password" }}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
+          SECRETS_SYSTEM="{{ index .Data "hydra-server-secret" }}"
+          DSN = "postgres://postgres:{{ index .Data "hydra-db-password" }}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
           {{ end }}
         EOF
 
@@ -293,7 +293,7 @@ job "cw-auth" {
       template {
         data = <<EOF
           {{ with secret "services/cw-auth" }}
-          POSTGRES_PASSWORD = {{ .Data "hydra-db-password" }}
+          POSTGRES_PASSWORD = {{ index .Data "hydra-db-password" }}
           {{ end }}
         EOF
 

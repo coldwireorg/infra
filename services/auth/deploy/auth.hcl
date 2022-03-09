@@ -28,6 +28,23 @@ job "cw-auth" {
       delay    = "15s"
     }
 
+    template {
+      data = <<EOF
+        {{ with secret "services/hydra" }}
+        SECRETS_SYSTEM="{{ .Data.system }}"
+        {{ end }}
+      EOF
+
+      destination = "secrets/vault.env"
+      env         = true
+    }
+
+    vault {
+      policies = ["hydra"]
+      change_mode   = "signal"
+      change_signal = "SIGHUP"
+    }
+
     task "cw-auth-web-server" {
       driver = "docker"
 
@@ -139,17 +156,6 @@ job "cw-auth" {
         URLS_SELF_ISSUER="https://auth.coldwire.org"
       }
 
-      template {
-        data = <<EOF
-          {{ with secret "services/hydra" }}
-          SECRETS_SYSTEM="{{ .Data.system }}"
-          {{ end }}
-        EOF
-
-        destination = "secrets/vault.env"
-        env         = true
-      }
-
       config {
         image = "oryd/hydra:v1.11.7"
         ports = ["cw-auth-hydra-public", "cw-auth-hydra-admin"]
@@ -161,12 +167,6 @@ job "cw-auth" {
           "--sqa-opt-out",
           "--dangerous-force-http",
         ]
-      }
-
-      vault {
-        policies = ["hydra"]
-        change_mode   = "signal"
-        change_signal = "SIGHUP"
       }
     }
 

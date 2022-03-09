@@ -67,7 +67,7 @@ job "cw-auth" {
           {{ end }}
         EOF
 
-        destination = "secrets/vault.env"
+        destination = "secrets/cw-auth-web-server.env"
         env = true
       }
 
@@ -130,7 +130,7 @@ job "cw-auth" {
           {{ end }}
         EOF
 
-        destination = "secrets/vault.env"
+        destination = "secrets/cw-auth-web-database.env"
         env = true
       }
 
@@ -190,7 +190,7 @@ job "cw-auth" {
           {{ end }}
         EOF
 
-        destination = "secrets/vault.env"
+        destination = "secrets/cw-auth-hydra-server.env"
         env = true
       }
 
@@ -240,7 +240,7 @@ job "cw-auth" {
           {{ end }}
         EOF
 
-        destination = "secrets/vault.env"
+        destination = "secrets/cw-auth-hydra-migrate.env"
         env = true
       }
 
@@ -297,7 +297,7 @@ job "cw-auth" {
           {{ end }}
         EOF
 
-        destination = "secrets/vault.env"
+        destination = "secrets/cw-auth-hydra-database.env"
         env = true
       }
 

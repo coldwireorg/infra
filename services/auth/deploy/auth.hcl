@@ -129,7 +129,7 @@ job "cw-auth" {
 
       env {
         DSN = "postgres://postgres:12345@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
-        SECRETS_SYSTEM="ThisIsJustASuperToken!"
+        SECRETS_SYSTEM="{{ with secret "services/hydra" }}{{ .Data.data.system }}{{end}}"
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
         SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
         SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
@@ -151,6 +151,10 @@ job "cw-auth" {
           "--sqa-opt-out",
           "--dangerous-force-http",
         ]
+      }
+
+      vault {
+        policies = ["hydra"]
       }
     }
 

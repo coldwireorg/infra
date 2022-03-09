@@ -19,3 +19,10 @@ server {
 consul {
   address = "{{ GetInterfaceIP \"coldnet\" }}:8500"
 }
+
+vault {
+  enabled = true
+  address = "http://10.42.0.1:8200"
+  task_token_ttl = "72h"
+  create_from_role = "nomad-cluster"
+}

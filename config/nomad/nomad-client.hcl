@@ -27,6 +27,10 @@ consul {
   address = "{{ GetInterfaceIP \"coldnet\" }}:8500"
 }
 
+vault {
+  enabled = true
+  address = "http://10.42.0.1:8200"
+}
 
 plugin "docker" {
   config {

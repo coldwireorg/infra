@@ -28,23 +28,6 @@ job "cw-auth" {
       delay    = "15s"
     }
 
-    template {
-      data = <<EOF
-        {{ with secret "services/data/hydra" }}
-        SECRETS_SYSTEM="{{ .Data.data.system }}"
-        {{ end }}
-      EOF
-
-      destination = "secrets/vault.env"
-      env         = true
-    }
-
-    vault {
-      policies = ["hydra"]
-      change_mode   = "signal"
-      change_signal = "SIGHUP"
-    }
-
     task "cw-auth-web-server" {
       driver = "docker"
 
@@ -167,6 +150,23 @@ job "cw-auth" {
           "--sqa-opt-out",
           "--dangerous-force-http",
         ]
+      }
+
+      template {
+        data = <<EOF
+          {{ with secret "services/data/hydra" }}
+          SECRETS_SYSTEM="{{ .Data.data.system }}"
+          {{ end }}
+        EOF
+
+        destination = "secrets/vault.env"
+        env         = true
+      }
+
+      vault {
+        policies = ["hydra"]
+        change_mode   = "signal"
+        change_signal = "SIGHUP"
       }
     }
 

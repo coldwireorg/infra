@@ -53,7 +53,7 @@ job "cw-auth" {
         HYDRA_PUBLIC_URL = "https://auth.coldwire.org/"
         HYDRA_ADMIN_URL = "${NOMAD_IP_cw-auth-hydra-admin}:${NOMAD_PORT_cw-auth-hydra-admin}"
 
-        DB_URL = "postgresql://postgres:${DB_PASSWORD}@${NOMAD_IP_cw-auth-web-database}:${NOMAD_PORT_cw-auth-web-database}/auth"
+        DB_ADDR="${NOMAD_ADDR_cw-auth-web-database}"
       }
 
       config {
@@ -63,13 +63,11 @@ job "cw-auth" {
       }
 
       template {
-        data = <<EOF
-          {{ with secret "services/cw-auth" }}
-          DB_PASSWORD="{{ .Data.web_db_password }}"
-          {{ end }}
-        EOF
+        data = <<EOH
+          DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.web_db_password }}{{ end }}@{{ env "DB_ADDR" }}/auth
+        EOH
 
-        destination = "secrets/vault.env"
+        destination = "secret/vault.env"
         env = true
       }
 
@@ -136,6 +134,15 @@ job "cw-auth" {
         env = true
       }
 
+      template {
+        data = <<EOH
+          POSTGRES_PASSWORD={{ with secret "services/data/cw-auth" }}{{ .Data.data.web_db_password }}{{ end }}
+        EOH
+
+        destination = "secret/vault.env"
+        env = true
+      }
+
       vault {
         policies = ["cw-auth"]
         change_mode   = "signal"
@@ -161,7 +168,6 @@ job "cw-auth" {
       }
 
       env {
-        DSN = "postgres://postgres:${DB_PASSWORD}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
         SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
         SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
@@ -170,6 +176,7 @@ job "cw-auth" {
         URLS_LOGOUT="https://auth.coldwire.org/api/logout"
         URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/sign-in"
         URLS_SELF_ISSUER="https://auth.coldwire.org"
+        DB_ADDR="${NOMAD_ADDR_cw-auth-hydra-database}"
       }
 
       config {
@@ -186,14 +193,12 @@ job "cw-auth" {
       }
 
       template {
-        data = <<EOF
-          {{ with secret "services/cw-auth" }}
-          SECRETS_SYSTEM="{{ .Data.hydra_server_secret }}"
-          DB_PASSWORD="{{ .Data.hydra_db_password }}"
-          {{ end }}
-        EOF
+        data = <<EOH
+          SECRETS_SYSTEM={{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_server_secret }}{{ end }}
+          DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}@{{ env "DB_ADDR" }}/hydra
+        EOH
 
-        destination = "secrets/vault.env"
+        destination = "secret/vault.env"
         env = true
       }
 
@@ -242,7 +247,7 @@ job "cw-auth" {
           DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}@{{ env "DB_ADDR" }}/hydra
         EOH
 
-        destination = "local/vault.env"
+        destination = "secret/vault.env"
         env = true
       }
 
@@ -265,6 +270,7 @@ job "cw-auth" {
         POSTGRES_USER = "postgres"
         POSTGRES_DB = "hydra"
         PGPORT = "${NOMAD_PORT_cw-auth-hydra-database}"
+        DB_ADDR="${NOMAD_ADDR_cw-auth-hydra-database}"
       }
 
       config {
@@ -293,13 +299,11 @@ job "cw-auth" {
       }
 
       template {
-        data = <<EOF
-          {{ with secret "services/cw-auth" }}
-          POSTGRES_PASSWORD={{ .Data.hydra_db_password }}
-          {{ end }}
-        EOF
+        data = <<EOH
+          POSTGRES_PASSWORD={{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}
+        EOH
 
-        destination = "secrets/vault.env"
+        destination = "secret/vault.env"
         env = true
       }
 

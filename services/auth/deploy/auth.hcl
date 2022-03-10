@@ -213,7 +213,6 @@ job "cw-auth" {
       }
 
       env {
-        DSN = "postgres://postgres:${DB_PASSWORD}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
         SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
         SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
@@ -240,7 +239,7 @@ job "cw-auth" {
         data = <<EOF
           {{ with secret "services/cw-auth" }}
           SECRETS_SYSTEM="{{ .Data.hydra_server_secret }}"
-          DB_PASSWORD="{{ .Data.hydra_db_password }}"
+          DSN="postgres://postgres:{{ .Data.hydra_db_password }}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
           {{ end }}
         EOF
 

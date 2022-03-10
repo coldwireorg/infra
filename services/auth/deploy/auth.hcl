@@ -221,6 +221,7 @@ job "cw-auth" {
         URLS_LOGOUT="https://auth.coldwire.org/api/logout"
         URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/sign-in"
         URLS_SELF_ISSUER="https://auth.coldwire.org/"
+        DB_ADDR="${NOMAD_ADDR_cw-auth-hydra-database}"
       }
 
       config {
@@ -238,7 +239,7 @@ job "cw-auth" {
       template {
         data = <<EOH
           SECRETS_SYSTEM={{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_server_secret }}{{ end }}
-          DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}@{{ env "NOMAD_ADDR_cw-auth-hydra-database" }}:{{ env "URLS_LOGIN" }}/hydra
+          DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}@{{ env "DB_ADDR" }}/hydra
         EOH
 
         destination = "local/vault.env"

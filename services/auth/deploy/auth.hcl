@@ -241,7 +241,7 @@ job "cw-auth" {
           DSN="postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}@{{env "NOMAD_IP_cw-auth-hydra-database"}}:{{env "NOMAD_PORT_cw-auth-hydra-database"}}/hydra"
         EOH
 
-        destination = "secrets/vault.env"
+        destination = "local/vault.env"
         env = true
       }
 

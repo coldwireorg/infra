@@ -239,7 +239,7 @@ job "cw-auth" {
         data = <<EOF
           {{ with secret "services/data/cw-auth" }}
           SECRETS_SYSTEM="{{ .Data.hydra_server_secret }}"
-          DSN="postgres://postgres:{{ .Data.data.hydra_db_password }}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
+          DSN="postgres://postgres:{{ .Data.data.hydra_db_password }}@{{env "NOMAD_IP_cw-auth-hydra-database"}}:{{env "NOMAD_PORT_cw-auth-hydra-database"}}/hydra"
           {{ end }}
         EOF
 

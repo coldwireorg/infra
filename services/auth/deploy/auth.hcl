@@ -124,22 +124,11 @@ job "cw-auth" {
       }
 
       template {
-        data = <<EOF
-          {{ with secret "services/cw-auth" }}
-          POSTGRES_PASSWORD={{ .Data.web_db_password }}
-          {{ end }}
-        EOF
-
-        destination = "secrets/vault.env"
-        env = true
-      }
-
-      template {
         data = <<EOH
           POSTGRES_PASSWORD={{ with secret "services/data/cw-auth" }}{{ .Data.data.web_db_password }}{{ end }}
         EOH
 
-        destination = "secret/vault.env"
+        destination = "secrets/vault.env"
         env = true
       }
 
@@ -198,7 +187,7 @@ job "cw-auth" {
           DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}@{{ env "DB_ADDR" }}/hydra
         EOH
 
-        destination = "secret/vault.env"
+        destination = "secrets/vault.env"
         env = true
       }
 
@@ -247,7 +236,7 @@ job "cw-auth" {
           DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}@{{ env "DB_ADDR" }}/hydra
         EOH
 
-        destination = "secret/vault.env"
+        destination = "secrets/vault.env"
         env = true
       }
 
@@ -303,7 +292,7 @@ job "cw-auth" {
           POSTGRES_PASSWORD={{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}
         EOH
 
-        destination = "secret/vault.env"
+        destination = "secrets/vault.env"
         env = true
       }
 

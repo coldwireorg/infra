@@ -53,7 +53,7 @@ job "cw-auth" {
         HYDRA_PUBLIC_URL = "https://auth.coldwire.org/"
         HYDRA_ADMIN_URL = "${NOMAD_IP_cw-auth-hydra-admin}:${NOMAD_PORT_cw-auth-hydra-admin}"
 
-        DB_URL = "postgresql://postgres:${env["DB_PASSWORD"]}@${NOMAD_IP_cw-auth-web-database}:${NOMAD_PORT_cw-auth-web-database}/auth"
+        DB_URL = "postgresql://postgres:${DB_PASSWORD}@${NOMAD_IP_cw-auth-web-database}:${NOMAD_PORT_cw-auth-web-database}/auth"
       }
 
       config {
@@ -65,7 +65,7 @@ job "cw-auth" {
       template {
         data = <<EOF
           {{ with secret "services/cw-auth" }}
-          DB_PASSWORD = "{{ .Data.web_db_password }}"
+          DB_PASSWORD="{{ .Data.web_db_password }}"
           {{ end }}
         EOF
 
@@ -128,7 +128,7 @@ job "cw-auth" {
       template {
         data = <<EOF
           {{ with secret "services/cw-auth" }}
-          POSTGRES_PASSWORD = {{ .Data.web_db_password }}
+          POSTGRES_PASSWORD={{ .Data.web_db_password }}
           {{ end }}
         EOF
 
@@ -161,7 +161,7 @@ job "cw-auth" {
       }
 
       env {
-        DSN = "postgres://postgres:${env["DB_PASSWORD"]}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
+        DSN = "postgres://postgres:${DB_PASSWORD}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
         SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
         SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
@@ -213,7 +213,7 @@ job "cw-auth" {
       }
 
       env {
-        DSN = "postgres://postgres:${env["DB_PASSWORD"]}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
+        DSN = "postgres://postgres:${DB_PASSWORD}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
         SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
         SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
@@ -297,7 +297,7 @@ job "cw-auth" {
       template {
         data = <<EOF
           {{ with secret "services/cw-auth" }}
-          POSTGRES_PASSWORD = {{ .Data.hydra_db_password }}
+          POSTGRES_PASSWORD={{ .Data.hydra_db_password }}
           {{ end }}
         EOF
 

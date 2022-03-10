@@ -18,7 +18,7 @@ job "cw-auth" {
       port "cw-auth-hydra-admin" {
         to = -1
       }
-      port "cw-auth-hydra-database" {
+      port "cw_auth_hydra_database" {
         to = -1
       }
     }
@@ -161,7 +161,7 @@ job "cw-auth" {
       }
 
       env {
-        DSN = "postgres://postgres:${DB_PASSWORD}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
+        DSN = "postgres://postgres:${DB_PASSWORD}@${NOMAD_IP_cw_auth_hydra_database}:${NOMAD_PORT_cw_auth_hydra_database}/hydra"
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
         SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
         SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
@@ -238,7 +238,7 @@ job "cw-auth" {
       template {
         data = <<EOH
           SECRETS_SYSTEM={{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_server_secret }}{{ end }}
-          DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}@{{ env "NOMAD_IP_cw-auth-hydra-database" }}:{{ env "attr.unique.hostname" }}/hydra
+          DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}@{{ env "NOMAD_IP_cw_auth_hydra_database" }}:{{ env "attr.unique.hostname" }}/hydra
         EOH
 
         destination = "local/vault.env"
@@ -252,7 +252,7 @@ job "cw-auth" {
       }
     }
 
-    task "cw-auth-hydra-database" {
+    task "cw_auth_hydra_database" {
       driver = "docker"
 
       lifecycle {
@@ -263,12 +263,12 @@ job "cw-auth" {
       env {
         POSTGRES_USER = "postgres"
         POSTGRES_DB = "hydra"
-        PGPORT = "${NOMAD_PORT_cw-auth-hydra-database}"
+        PGPORT = "${NOMAD_PORT_cw_auth_hydra_database}"
       }
 
       config {
         image = "postgres:latest"
-        ports = ["cw-auth-hydra-database"]
+        ports = ["cw_auth_hydra_database"]
         network_mode = "host"
 
         volumes = [
@@ -277,8 +277,8 @@ job "cw-auth" {
       }
 
       service {
-        name = "cw-auth-hydra-database"
-        port = "cw-auth-hydra-database"
+        name = "cw_auth_hydra_database"
+        port = "cw_auth_hydra_database"
 
         address_mode = "host"
 

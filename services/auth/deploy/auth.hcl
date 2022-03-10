@@ -63,7 +63,7 @@ job "cw-auth" {
       template {
         data = <<EOF
           {{ with secret "services/cw-auth" }}
-          DB_URL = "postgresql://postgres:{{ index .Data "web-db-password" }}@${NOMAD_IP_cw-auth-web-database}:${NOMAD_PORT_cw-auth-web-database}/auth"
+          DSN = "postgres://postgres:{{ index .Data "web-db-password" }}@{{ env "NOMAD_IP_cw-auth-web-database" }}:{{ env "NOMAD_PORT_cw-auth-web-database" }}/auth"
           {{ end }}
         EOF
 
@@ -186,7 +186,7 @@ job "cw-auth" {
         data = <<EOF
           {{ with secret "services/cw-auth" }}
           SECRETS_SYSTEM="{{ index .Data "hydra-server-secret" }}"
-          DSN = "postgres://postgres:{{ index .Data "hydra-db-password" }}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
+          DSN = "postgres://postgres:{{ index .Data "hydra-db-password" }}@{{ env "NOMAD_IP_cw-auth-hydra-database" }}:{{ env "NOMAD_PORT_cw-auth-hydra-database" }}/hydra"
           {{ end }}
         EOF
 
@@ -236,7 +236,7 @@ job "cw-auth" {
         data = <<EOF
           {{ with secret "services/cw-auth" }}
           SECRETS_SYSTEM="{{ index .Data "hydra-server-secret" }}"
-          DSN = "postgres://postgres:{{ index .Data "hydra-db-password" }}@${NOMAD_IP_cw-auth-hydra-database}:${NOMAD_PORT_cw-auth-hydra-database}/hydra"
+          DSN = "postgres://postgres:{{ index .Data "hydra-db-password" }}@{{ env "NOMAD_IP_cw-auth-hydra-database" }}:{{ env "NOMAD_PORT_cw-auth-hydra-database" }}/hydra"
           {{ end }}
         EOF
 

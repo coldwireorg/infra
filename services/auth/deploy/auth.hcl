@@ -64,7 +64,7 @@ job "cw-auth" {
 
       template {
         data = <<EOH
-          DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.web_db_password }}{{ end }}@{{ env "DB_ADDR" }}/auth
+          DB_URL=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.web_db_password }}{{ end }}@{{ env "DB_ADDR" }}/auth
         EOH
 
         destination = "secret/vault.env"

@@ -238,7 +238,7 @@ job "cw-auth" {
       template {
         data = <<EOH
           SECRETS_SYSTEM={{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_server_secret }}{{ end }}
-          DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}@{{ env "NOMAD_IP_cw-auth-hydra-database" }}:{{ env "URLS_LOGIN" }}/hydra
+          DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}@{{ index env["NOMAD_IP_cw-auth-hydra-database"] }}:{{ env "URLS_LOGIN" }}/hydra
         EOH
 
         destination = "local/vault.env"

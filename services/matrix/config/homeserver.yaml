@@ -1984,8 +1984,8 @@ oidc_providers:
     skip_verification: false
     user_mapping_provider:
       config:
-        localpart_template: "(| user.username |)"
-        display_name_template: "(| user.username |)"
+        localpart_template: "{{ user.username }}"
+        display_name_template: "{{ user.username }}"
 
 
 # Enable Central Authentication Service (CAS) for registration and login.

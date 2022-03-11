@@ -46,7 +46,7 @@ job "cw-auth" {
       }
 
       env {
-        CONFIG_FILE="/secrets/config.toml"
+        CONFIG_FILE="/local/config.toml"
 
         SRV_PORT ="${NOMAD_PORT_cw-auth-web-server}"
         HYDRA_ADDR = "${NOMAD_IP_cw-auth-hydra-admin}:${NOMAD_PORT_cw-auth-hydra-admin}"
@@ -68,7 +68,7 @@ job "cw-auth" {
 
       template {
         source = "local/config.toml.tpl"
-        destination = "secrets/config.toml"
+        destination = "local/config.toml"
       }
 
       vault {

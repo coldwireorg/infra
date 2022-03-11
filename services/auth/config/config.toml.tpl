@@ -25,4 +25,4 @@ public = "https://auth.coldwire.org/"
   ResponseTypes = ["code", "id_token"]
   Scope = "openid,offline"
   RedirectUris = ["https://bloc.coldwire.org/user/auth/oauth2/callback"]
-  TokenEndpointAuthMethod = "none"
+  TokenEndpointAuthMethod = "client_secret_post"

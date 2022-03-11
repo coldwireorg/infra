@@ -46,7 +46,7 @@ job "cw-auth" {
       }
 
       env {
-        CONFIG_FILE="/local/config.toml"
+        CONFIG_FILE="/secrets/config.toml"
 
         SRV_PORT ="${NOMAD_PORT_cw-auth-web-server}"
         HYDRA_ADDR = "${NOMAD_IP_cw-auth-hydra-admin}:${NOMAD_PORT_cw-auth-hydra-admin}"
@@ -62,8 +62,8 @@ job "cw-auth" {
       }
 
       artifact {
-        source = "https://codeberg.org/coldwire/infra/src/branch/main/services/auth/config/config.toml.tpl"
-        destination = "local/"
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/config.toml.tpl"
+        destination = "secrets/"
       }
 
       template {

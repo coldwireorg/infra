@@ -53,7 +53,6 @@ job "cw-matrix" {
 
         volumes = [
           "/mnt/storage/services/matrix/synapse/:/data",
-          "secrets/"
         ]
       }
 

@@ -46,29 +46,29 @@ job "cw-auth" {
       }
 
       env {
-        DOMAIN = "auth.coldwire.org"
-        SERVER_PORT ="${NOMAD_PORT_cw-auth-web-server}"
+        CONFIG_FILE="/secrets/config.toml"
 
-        AUTH_SERVER_URL = "https://auth.coldwire.org"
-        HYDRA_PUBLIC_URL = "https://auth.coldwire.org/"
-        HYDRA_ADMIN_URL = "${NOMAD_IP_cw-auth-hydra-admin}:${NOMAD_PORT_cw-auth-hydra-admin}"
+        SRV_PORT ="${NOMAD_PORT_cw-auth-web-server}"
+        HYDRA_ADDR = "${NOMAD_IP_cw-auth-hydra-admin}:${NOMAD_PORT_cw-auth-hydra-admin}"
 
-        DB_ADDR="${NOMAD_ADDR_cw-auth-web-database}"
+        DB_ADDR="${NOMAD_IP_cw-auth-web-database}"
+        DB_PORT="${NOMAD_PORT_cw-auth-web-database}"
       }
 
       config {
-        image = "coldwireorg/auth:v0.0.10"
+        image = "coldwireorg/auth:v0.1.0"
         ports = ["cw-auth-web-server"]
         network_mode = "host"
       }
 
-      template {
-        data = <<EOH
-          DB_URL=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.web_db_password }}{{ end }}@{{ env "DB_ADDR" }}/auth
-        EOH
+      artifact {
+        source      = "https://codeberg.org/coldwire/infra/src/branch/main/services/auth/config/config.toml.tpl"
+        destination = "local/config.toml.tpl"
+      }
 
-        destination = "secret/vault.env"
-        env = true
+      template {
+        source      = "local/config.toml.tpl"
+        destination = "secrets/config.toml"
       }
 
       vault {

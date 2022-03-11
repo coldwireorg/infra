@@ -53,11 +53,11 @@ job "cw-matrix" {
 
         volumes = [
           "/mnt/storage/services/matrix/synapse/:/data",
+          "secrets/"
         ]
       }
 
       env {
-        SYNAPSE_CONFIG_DIR="/secrets"
         MATRIX_PORT="${NOMAD_PORT_cw-matrix-synapse}"
         MATRIX_DB_ADDR="${NOMAD_ADDR_cw-matrix-database}"
       }
@@ -171,7 +171,7 @@ job "cw-matrix" {
       }
 
       config {
-        image = "vectorim/element-web:latest"
+        image = "bubuntux/element-web:latest"
         ports = ["cw-matrix-element"]
         network_mode = "host"
 

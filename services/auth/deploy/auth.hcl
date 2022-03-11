@@ -118,11 +118,6 @@ job "cw-auth" {
         }
       }
       
-      artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/tables.sql"
-        destination = "local/"
-      }
-
       template {
         data = <<EOH
           POSTGRES_PASSWORD={{ with secret "services/data/cw-auth" }}{{ .Data.data.web_db_password }}{{ end }}

@@ -83,6 +83,12 @@ job "cw-matrix" {
         source = "local/matrix.coldwire.org.signing.key"
         destination = "secrets/matrix.coldwire.org.signing.key"
       }
+
+      vault {
+        policies = ["cw-matrix"]
+        change_mode   = "signal"
+        change_signal = "SIGHUP"
+      }
     }
 
     task "cw-matrix-database" {
@@ -166,7 +172,7 @@ job "cw-matrix" {
 
       config {
         image = "vectorim/element-web:latest"
-        ports = ["cw-static-server"]
+        ports = ["cw-matrix-element"]
         network_mode = "host"
 
         volumes = [

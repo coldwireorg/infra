@@ -1,7 +1,7 @@
 [server]
 address = "0.0.0.0"
 port = "{{ env "SRV_PORT" }}"
-auth-url = "https://auth.coldwire.org/"
+auth-url = "https://auth.coldwire.org"
 auth-secret = "{{ with secret "services/data/cw-oidc-secrets" }}{{ .Data.data.cw_auth }}{{ end }}"
 
 [database]
@@ -25,4 +25,3 @@ public = "https://auth.coldwire.org/"
   ResponseTypes = ["code", "id_token"]
   Scope = "openid,offline"
   RedirectUris = ["https://bloc.coldwire.org/user/auth/oauth2/callback"]
-  TokenEndpointAuthMethod = "none"

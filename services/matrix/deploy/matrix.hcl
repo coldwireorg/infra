@@ -63,22 +63,24 @@ job "cw-matrix" {
       }
 
       artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/matrix/config/homeserver.yaml.tpl"
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/matrix/config/homeserver.yaml"
         destination = "local/"
       }
 
       template {
-        source = "local/homeserver.yaml.tpl"
+        left_delimiter = "(|"
+        right_delimiter = "|)"
+        source = "local/homeserver.yaml"
         destination = "secrets/homeserver.yaml"
       }
 
       artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/matrix/config/matrix.coldwire.org.signing.key.tpl"
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/matrix/config/matrix.coldwire.org.signing.key"
         destination = "local/"
       }
 
       template {
-        source = "local/matrix.coldwire.org.signing.key.tpl"
+        source = "local/matrix.coldwire.org.signing.key"
         destination = "secrets/matrix.coldwire.org.signing.key"
       }
     }

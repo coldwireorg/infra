@@ -297,7 +297,7 @@ listeners:
   # If you plan to use a reverse proxy, please see
   # https://matrix-org.github.io/synapse/latest/reverse_proxy.html.
   #
-  - port: {{ env "MATRIX_PORT" }}
+  - port: (| env "MATRIX_PORT" |)
     tls: false
     type: http
     x_forwarded: true
@@ -793,9 +793,9 @@ database:
   name: psycopg2
   args:
     user: synapse
-    password: {{ with secret "services/data/cw-matrix" }}{{ .Data.data.db_password }}{{ end }}
+    password: (| with secret "services/data/cw-matrix" |)(| .Data.data.db_password |)(| end |)
     database: synapse
-    host: {{ env "MATRIX_DB_ADDR" }}
+    host: (| env "MATRIX_DB_ADDR" |)
     cp_min: 5
     cp_max: 10
 
@@ -1547,7 +1547,7 @@ room_prejoin_state:
 # falsification of values. Must be specified for the User Consent
 # forms to work.
 #
-form_secret: "{{ with secret "services/data/cw-matrix" }}{{ .Data.data.form_secret }}{{ end }}"
+form_secret: "(| with secret "services/data/cw-matrix" |)(| .Data.data.form_secret |)(| end |)"
 
 ## Signing Keys ##
 
@@ -1978,14 +1978,14 @@ oidc_providers:
     discover: true
     issuer: "https://auth.coldwire.org/"
     client_id: "cw-matrix"
-    client_secret: "{{ with secret "services/data/cw-oidc-secrets" }}{{ .Data.data.cw_matrix }}{{ end }}"
+    client_secret: "(| with secret "services/data/cw-oidc-secrets" |)(| .Data.data.cw_matrix |)(| end |)"
     client_auth_method: client_secret_post
     scopes: ["openid"]
     skip_verification: false
     user_mapping_provider:
       config:
-        localpart_template: "{{ user.username }}"
-        display_name_template: "{{ user.username }}"
+        localpart_template: "(| user.username |)"
+        display_name_template: "(| user.username |)"
 
 
 # Enable Central Authentication Service (CAS) for registration and login.

@@ -63,12 +63,12 @@ job "cw-auth" {
 
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/config.toml.tpl"
-        destination = "secrets/"
+        destination = "local/"
       }
 
       template {
         source = "local/config.toml.tpl"
-        destination = "local/config.toml"
+        destination = "secrets/config.toml"
       }
 
       vault {

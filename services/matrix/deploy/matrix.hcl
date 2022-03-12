@@ -10,7 +10,7 @@ job "cw-matrix" {
         to = -1
       }
       port "cw-matrix-element" {
-        to = -1
+        to = 80
       }
       port "cw-matrix-database" {
         to = -1
@@ -53,6 +53,7 @@ job "cw-matrix" {
 
         volumes = [
           "/mnt/storage/services/matrix/synapse/:/data",
+          "/secrets/homeserver.yaml:/data/homeserver.yaml"
         ]
       }
 

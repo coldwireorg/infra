@@ -106,7 +106,7 @@ job "cw-matrix" {
       }
 
       env {
-        POSTGRES_INITDB_ARGS="--no-locale"
+        POSTGRES_INITDB_ARGS="--no-locale --encoding=UTF8"
         POSTGRES_USER = "synapse"
         POSTGRES_DB = "synapse"
         PGPORT = "${NOMAD_PORT_cw-matrix-database}"

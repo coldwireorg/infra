@@ -83,8 +83,8 @@ job "yfcfr-matrix" {
       }
 
       template {
-        source = "local/matrix.coldwire.org.signing.key"
-        destination = "secrets/matrix.coldwire.org.signing.key"
+        source = "local/matrix.fffgrenoble.fr.signing.key"
+        destination = "secrets/matrix.fffgrenoble.fr.signing.key"
       }
 
       artifact {

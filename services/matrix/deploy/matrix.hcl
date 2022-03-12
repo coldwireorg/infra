@@ -179,7 +179,7 @@ job "cw-matrix" {
         image = "dotwee/element-web:latest"
         ports = ["cw-matrix-element"]
 
-        command = "cp"
+        command = "/bin/cp"
         args = [
           "${NOMAD_TASK_DIR}/element.json",
           "/etc/element-web/config.json"

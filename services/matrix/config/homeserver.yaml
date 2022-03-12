@@ -297,7 +297,7 @@ listeners:
   # If you plan to use a reverse proxy, please see
   # https://matrix-org.github.io/synapse/latest/reverse_proxy.html.
   #
-  - port: (| env "MATRIX_PORT" |)
+  - port: 8080
     tls: false
     type: http
     x_forwarded: true

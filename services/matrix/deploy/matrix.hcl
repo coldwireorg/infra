@@ -7,7 +7,7 @@ job "cw-matrix" {
 
     network {
       port "cw-matrix-synapse" {
-        to = -1
+        to = 8080
       }
       port "cw-matrix-element" {
         to = 80
@@ -29,8 +29,6 @@ job "cw-matrix" {
         name = "cw-matrix-synapse"
         port = "cw-matrix-synapse"
 
-        address_mode = "host"
-
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.cw-matrix-synapse.rule=Host(`matrix.coldwire.org`)",
@@ -49,7 +47,6 @@ job "cw-matrix" {
       config {
         image = "matrixdotorg/synapse:latest"
         ports = ["cw-matrix-synapse"]
-        network_mode = "host"
 
         volumes = [
           "/mnt/storage/services/matrix/synapse/:/data",

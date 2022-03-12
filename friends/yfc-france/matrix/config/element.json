@@ -6,8 +6,22 @@
     }
   },
   "branding": {
-    "welcomeBackgroundUrl": "https://youthforclimate.fr/wp-content/uploads/2020/11/xtoulouse-edit1-scaled.jpg.pagespeed.ic.IE2hSeIK_t.webp",
-    "authHeaderLogoUrl": "https://youthforclimate.fr/wp-content/uploads/2019/06/Logo-sans-Feuilles-Simple.png"
+    "welcomeBackgroundUrl": "https://static.coldwire.org/yfc-france/background.webp",
+    "authHeaderLogoUrl": "https://static.coldwire.org/yfc-france/logo.png",
+    "authFooterLinks": [
+      {
+        "text": "Drive",
+        "url": "https://drive.youthforclimate.fr"
+      },
+      {
+        "text": "Toolpic",
+        "url": "https://toolpic.youthforclimate.fr"
+      },
+      {
+        "text": "Kits",
+        "url": "https://youthforclimate.fr/rejoindre-un-groupe-local/creer-son-groupe-local/"
+      }
+    ]
   },
   "default_theme": "dark",
   "embeddedPages": {

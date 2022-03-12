@@ -176,13 +176,13 @@ job "cw-matrix" {
       }
 
       config {
-        image = "bubuntux/element-web:latest"
+        image = "dotwee/element-web:latest"
         ports = ["cw-matrix-element"]
 
         command = "cp"
         args = [
-          "/local/element.json",
-          "/app/config.json"
+          "${NOMAD_TASK_DIR}/element.json",
+          "/etc/element-web/config.json"
         ]
       }
 

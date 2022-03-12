@@ -53,11 +53,11 @@ job "cw-matrix" {
 
         volumes = [
           "/mnt/storage/services/matrix/synapse/:/data",
-          "/secrets/homeserver.yaml:/data/homeserver.yaml"
         ]
       }
 
       env {
+        SYNAPSE_CONFIG_PATH="${NOMAD_SECRETS_DIR}/homeserver.yaml"
         MATRIX_PORT="${NOMAD_PORT_cw-matrix-synapse}"
         MATRIX_DB_ADDR="${NOMAD_ADDR_cw-matrix-database}"
       }
@@ -153,8 +153,6 @@ job "cw-matrix" {
         name = "cw-matrix-element"
         port = "cw-matrix-element"
 
-        address_mode = "host"
-
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.cw-matrix-element.rule=Host(`organize.coldwire.org`)",
@@ -173,7 +171,6 @@ job "cw-matrix" {
       config {
         image = "bubuntux/element-web:latest"
         ports = ["cw-matrix-element"]
-        network_mode = "host"
 
         volumes = [
           "local/element.json:/app/config.json"

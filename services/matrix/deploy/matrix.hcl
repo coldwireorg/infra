@@ -57,7 +57,7 @@ job "cw-matrix" {
       }
 
       env {
-        SYNAPSE_CONFIG_DIR="${NOMAD_SECRETS_DIR}/homeserver.yaml"
+        SYNAPSE_CONFIG_DIR="${NOMAD_SECRETS_DIR}"
         MATRIX_PORT="${NOMAD_PORT_cw-matrix-synapse}"
         MATRIX_DB_ADDR="${NOMAD_ADDR_cw-matrix-database}"
       }

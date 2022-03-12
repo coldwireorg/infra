@@ -297,7 +297,7 @@ listeners:
   # If you plan to use a reverse proxy, please see
   # https://matrix-org.github.io/synapse/latest/reverse_proxy.html.
   #
-  - port: 8080
+  - port: (| env "MATRIX_PORT" |)
     tls: false
     type: http
     x_forwarded: true
@@ -795,7 +795,8 @@ database:
     user: synapse
     password: (| with secret "services/data/cw-matrix" |)(| .Data.data.db_password |)(| end |)
     database: synapse
-    host: (| env "MATRIX_DB_ADDR" |)
+    hostaddr: (| env "MATRIX_DB_ADDR" |)
+    port: (| env "MATRIX_DB_PORT" |)
     cp_min: 5
     cp_max: 10
 

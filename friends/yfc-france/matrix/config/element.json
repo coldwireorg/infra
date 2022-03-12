@@ -27,7 +27,7 @@
   "embeddedPages": {
     "homeUrl": "https://fffgrenoble.fr"
   },
-  "permalinkPrefix": "https://organize.fffgrenoble.fr",
+  "permalinkPrefix": "https://chat.fffgrenoble.fr",
   "disable_guests": true,
   "features": {
       "feature_spotlight": true

@@ -179,8 +179,10 @@ job "cw-matrix" {
         image = "bubuntux/element-web:latest"
         ports = ["cw-matrix-element"]
 
-        volumes = [
-          "local/element.json:/app/config.json"
+        command = "cp"
+        args = [
+          "/local/element.json",
+          "/app/config.json"
         ]
       }
 

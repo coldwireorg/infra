@@ -5,6 +5,10 @@
       "server_name": "matrix.fffgrenoble.fr"
     }
   },
+  "branding": {
+    "welcomeBackgroundUrl": "https://youthforclimate.fr/wp-content/uploads/2020/11/xtoulouse-edit1-scaled.jpg.pagespeed.ic.IE2hSeIK_t.webp",
+    "authHeaderLogoUrl": "https://youthforclimate.fr/wp-content/uploads/2019/06/Logo-sans-Feuilles-Simple.png"
+  },
   "default_theme": "dark",
   "embeddedPages": {
     "homeUrl": "https://fffgrenoble.fr"

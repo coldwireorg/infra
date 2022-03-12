@@ -178,6 +178,10 @@ job "cw-matrix" {
       config {
         image = "dotwee/element-web:latest"
         ports = ["cw-matrix-element"]
+
+        volumes = [
+          "local/config.json:/etc/element-web/config.json"
+        ]
       }
 
       artifact {

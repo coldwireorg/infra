@@ -61,6 +61,8 @@ job "yfcfr-matrix" {
         MATRIX_PORT="${NOMAD_PORT_yfcfr-matrix-synapse}"
         MATRIX_DB_ADDR="${NOMAD_IP_yfcfr-matrix-database}"
         MATRIX_DB_PORT="${NOMAD_PORT_yfcfr-matrix-database}"
+        GID=0
+        UID=0
       }
 
       artifact {

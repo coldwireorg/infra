@@ -52,7 +52,7 @@ job "yfcfr-matrix" {
         network_mode = "host"
 
         volumes = [
-          "/mnt/storage/services/matrix/synapse/:/data",
+          "/mnt/storage/friends/yfc-france/matrix/synapse/:/data",
         ]
       }
 
@@ -118,7 +118,7 @@ job "yfcfr-matrix" {
         network_mode = "host"
 
         volumes = [
-          "/mnt/storage/services/matrix/database:/var/lib/postgresql/data",
+          "/mnt/storage/friends/yfc-france/matrix/database:/var/lib/postgresql/data",
         ]
       }
 

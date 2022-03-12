@@ -25,6 +25,7 @@ public = "https://auth.coldwire.org/"
   ResponseTypes = ["code", "id_token"]
   Scope = "openid,offline"
   RedirectUris = ["https://matrix.coldwire.org/_synapse/client/oidc/callback"]
+  TokenEndpointAuthMethod = "client_secret_post"
 
   [[hydra.clients]]
   ClientId = "bloc"
@@ -33,3 +34,4 @@ public = "https://auth.coldwire.org/"
   ResponseTypes = ["code", "id_token"]
   Scope = "openid,offline"
   RedirectUris = ["https://bloc.coldwire.org/user/auth/oauth2/callback"]
+  TokenEndpointAuthMethod = "client_secret_post"

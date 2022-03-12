@@ -1554,7 +1554,7 @@ form_secret: "(| with secret "friends/data/yfcfr-matrix" |)(| .Data.data.form_se
 
 # Path to the signing key to sign messages with
 #
-signing_key_path: "(| env "SYNAPSE_CONFIG_DIR" |)/matrix.coldwire.org.signing.key"
+signing_key_path: "(| env "SYNAPSE_CONFIG_DIR" |)/matrix.fffgrenoble.fr.signing.key"
 
 # The keys that the server used to sign messages with but won't use
 # to sign new messages.

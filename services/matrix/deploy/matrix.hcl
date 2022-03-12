@@ -57,7 +57,7 @@ job "cw-matrix" {
       }
 
       env {
-        SYNAPSE_CONFIG_PATH="${NOMAD_SECRETS_DIR}/homeserver.yaml"
+        SYNAPSE_CONFIG_DIR="${NOMAD_SECRETS_DIR}/homeserver.yaml"
         MATRIX_PORT="${NOMAD_PORT_cw-matrix-synapse}"
         MATRIX_DB_ADDR="${NOMAD_ADDR_cw-matrix-database}"
       }
@@ -82,6 +82,11 @@ job "cw-matrix" {
       template {
         source = "local/matrix.coldwire.org.signing.key"
         destination = "secrets/matrix.coldwire.org.signing.key"
+      }
+
+      artifact {
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/matrix/config/matrix.coldwire.org.log.config"
+        destination = "secrets/"
       }
 
       vault {

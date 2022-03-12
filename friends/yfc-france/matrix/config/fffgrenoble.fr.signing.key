@@ -1,0 +1,1 @@
+{{ with secret "services/data/cw-matrix" }}{{ .Data.data.signing_key }}{{ end }}

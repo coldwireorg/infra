@@ -23,7 +23,7 @@ public = "https://auth.coldwire.org/"
   ClientSecret = "{{ with secret "services/data/cw-oidc-secrets" }}{{ .Data.data.cw_matrix }}{{ end }}"
   GrantTypes = ["authorization_code", "refresh_token"]
   ResponseTypes = ["code", "id_token"]
-  Scope = "openid,offline"
+  Scope = "openid"
   RedirectUris = ["https://matrix.coldwire.org/_synapse/client/oidc/callback"]
   TokenEndpointAuthMethod = "client_secret_post"
 

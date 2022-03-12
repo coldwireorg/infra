@@ -1,49 +1,20 @@
 {
   "default_server_config": {
     "m.homeserver": {
-      "base_url": "https://matrix.coldwire.org",
-      "server_name": "matrix.coldwire.org"
+      "base_url": "https://matrix.fffgrenoble.fr",
+      "server_name": "matrix.fffgrenoble.fr"
     }
   },
-  "sso_redirect_options": {
-    "immediate": true
-  },
-  "logout_redirect_url": "https://auth.coldwire.org/logout",
   "brand": "Coldwire",
-  "branding": {
-    "welcomeBackgroundUrl": "https://static.coldwire.org/img/background.png",
-    "authHeaderLogoUrl": "https://static.coldwire.org/img/logo_full.png",
-    "authFooterLinks": [{
-      "text": "Bloc",
-      "url": "https://bloc.coldwire.org"
-    }]
-  },
   "default_theme": "dark",
-  "embeddedPages": {
-    "homeUrl": "https://coldwire.org"
-  },
-  "permalinkPrefix": "https://organize.coldwire.org",
+  "permalinkPrefix": "https://chat.fffgrenoble.fr",
   "disable_guests": true,
   "terms_and_conditions_links": [
       {
-          "url": "https://element.io/privacy",
-          "text": "Privacy Policy"
-      },
-      {
-          "url": "https://element.io/cookie-policy",
-          "text": "Cookie Policy"
+          "url": "https://youthforclimate.fr/mentions-legales/",
+          "text": "Mentions legales"
       }
   ],
-  "hostSignup": {
-    "brand": "Element Home",
-    "cookiePolicyUrl": "https://element.io/cookie-policy",
-    "domains": [
-        "matrix.org"
-    ],
-    "privacyPolicyUrl": "https://element.io/privacy",
-    "termsOfServiceUrl": "https://element.io/terms-of-service",
-    "url": "https://ems.element.io/element-home/in-app-loader"
-  },
   "features": {
       "feature_spotlight": true
   }

@@ -138,7 +138,7 @@ job "cw-matrix" {
       
       template {
         data = <<EOH
-          POSTGRES_PASSWORD={{ with secret "services/data/cw-matrix" }}{{ .Data.data.synapse_db_password }}{{ end }}
+          POSTGRES_PASSWORD={{ with secret "services/data/cw-matrix" }}{{ .Data.data.db_password }}{{ end }}
         EOH
 
         destination = "secrets/vault.env"

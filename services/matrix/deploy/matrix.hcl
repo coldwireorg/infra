@@ -180,7 +180,7 @@ job "cw-matrix" {
         ports = ["cw-matrix-element"]
 
         volumes = [
-          "local/config.json:/etc/element-web/config.json"
+          "local/element.json:/etc/element-web/config.json"
         ]
       }
 

@@ -19,7 +19,7 @@ job "cw-static" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.cw-static-server.rule=Host((`static.coldwire.org`) || (Host(`coldwire.org`) && Path(`/.well-known/matrix/server`)))",
+        "traefik.http.routers.cw-static-server.rule=(Host(`static.coldwire.org`) || (Host(`coldwire.org`) && Path(`/.well-known/matrix/server`)))",
         "traefik.http.routers.cw-static-server.tls=true",
         "traefik.http.routers.cw-static-server.tls.certresolver=coldwire",
       ]

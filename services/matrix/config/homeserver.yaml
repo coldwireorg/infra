@@ -119,6 +119,4 @@ oidc_providers:
         display_name_template: "{{ user.username }}"
 
 password_config:
-   # Uncomment to disable password login
-   #
-   # enabled: false
+   enabled: false

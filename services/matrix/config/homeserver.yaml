@@ -1,6 +1,6 @@
 ## Server ##
 
-server_name: "coldwire.org"
+server_name: "matrix.coldwire.org"
 
 # When running as a daemon, the file to store the pid in
 #

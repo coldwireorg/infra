@@ -1,6 +1,6 @@
 ## Server ##
 
-server_name: "matrix.coldwire.org"
+server_name: "coldwire.org"
 
 # When running as a daemon, the file to store the pid in
 #
@@ -8,8 +8,6 @@ pid_file: /data/homeserver.pid
 
 # The absolute URL to the web client which / will redirect to.
 web_client_location: https://organize.coldwire.org/
-
-serve_server_wellknown: true
 
 listeners:
   - port: (| env "MATRIX_PORT" |)

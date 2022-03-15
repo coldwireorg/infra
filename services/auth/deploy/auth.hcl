@@ -56,7 +56,7 @@ job "cw-auth" {
       }
 
       config {
-        image = "coldwireorg/auth:v0.1.2"
+        image = "coldwireorg/auth:v0.1.3"
         ports = ["cw-auth-web-server"]
         network_mode = "host"
       }

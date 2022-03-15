@@ -1,11 +1,10 @@
-## Builder
-FROM node:17.6.0-alpine3.15 as builder
+FROM node:17.2-bullseye as builder
 WORKDIR /src
+RUN echo ${PATH}
 RUN git init && \
     git remote add origin https://codeberg.org/coldwire/cinny.git && \
     git pull origin dev
-RUN npm ci
-COPY . /src/
+RUN npm i
 RUN npm run build
 
 ## App

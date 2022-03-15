@@ -176,7 +176,7 @@ job "cw-matrix" {
       }
 
       config {
-        image = "coldwire/cinny:v1.0.0"
+        image = "coldwireorg/cinny:v1.0.0"
         ports = ["cw-matrix-cinny"]
       }
     }

@@ -33,7 +33,7 @@ job "cw-matrix" {
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.cw-matrix-synapse.rule=Host(`matrix.coldwire.org`) || (Host(`coldwire.org`) && PathPrefix(`/.well-known/matrix/server`))",
+          "traefik.http.routers.cw-matrix-synapse.rule=(Host(`matrix.coldwire.org`) || (Host(`coldwire.org`) && Path(`/.well-known/matrix/server`)))",
           "traefik.http.routers.cw-matrix-synapse.tls=true",
           "traefik.http.routers.cw-matrix-synapse.tls.certresolver=coldwire",
         ]

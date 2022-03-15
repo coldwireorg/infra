@@ -1,11 +1,3 @@
-modules:
-  #- module: my_super_module.MySuperClass
-  #  config:
-  #    do_thing: true
-  #- module: my_other_super_module.SomeClass
-  #  config: {}
-
-
 ## Server ##
 
 server_name: "coldwire.org"
@@ -15,7 +7,7 @@ server_name: "coldwire.org"
 pid_file: /data/homeserver.pid
 
 # The absolute URL to the web client which / will redirect to.
-web_client_location: https://element.coldwire.org/
+web_client_location: https://organize.coldwire.org/
 
 serve_server_wellknown: true
 

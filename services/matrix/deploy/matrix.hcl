@@ -9,7 +9,7 @@ job "cw-matrix" {
       port "cw-matrix-synapse" {
         to = -1
       }
-      port "cw-matrix-element" {
+      port "cw-matrix-cinny" {
         to = 80
       }
       port "cw-matrix-database" {
@@ -33,7 +33,7 @@ job "cw-matrix" {
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.cw-matrix-synapse.rule=Host(`matrix.coldwire.org`)",
+          "traefik.http.routers.cw-matrix-synapse.rule=Host(`matrix.coldwire.org`) || (Host(`coldwire.org`) && PathPrefix(`/.well-known/matrix/server`))",
           "traefik.http.routers.cw-matrix-synapse.tls=true",
           "traefik.http.routers.cw-matrix-synapse.tls.certresolver=coldwire",
         ]
@@ -153,18 +153,18 @@ job "cw-matrix" {
       }
     }
 
-    task "cw-matrix-element" {
+    task "cw-matrix-cinny" {
       driver = "docker"
 
       service {
-        name = "cw-matrix-element"
-        port = "cw-matrix-element"
+        name = "cw-matrix-cinny"
+        port = "cw-matrix-cinny"
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.cw-matrix-element.rule=Host(`organize.coldwire.org`)",
-          "traefik.http.routers.cw-matrix-element.tls=true",
-          "traefik.http.routers.cw-matrix-element.tls.certresolver=coldwire",
+          "traefik.http.routers.cw-matrix-cinny.rule=Host(`organize.coldwire.org`)",
+          "traefik.http.routers.cw-matrix-cinny.tls=true",
+          "traefik.http.routers.cw-matrix-cinny.tls.certresolver=coldwire",
         ]
 
         check {
@@ -176,17 +176,8 @@ job "cw-matrix" {
       }
 
       config {
-        image = "dotwee/element-web:latest"
-        ports = ["cw-matrix-element"]
-
-        volumes = [
-          "local/element.json:/etc/element-web/config.json"
-        ]
-      }
-
-      artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/matrix/config/element.json"
-        destination = "local/"
+        image = "coldwire/cinny:v1.0.0"
+        ports = ["cw-matrix-cinny"]
       }
     }
   }

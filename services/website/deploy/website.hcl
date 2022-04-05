@@ -7,7 +7,7 @@ job "cw-website" {
 
     network {
       port "cw-website-server" {
-        to = -1
+        to = 1313
       }
     }
 
@@ -33,10 +33,6 @@ job "cw-website" {
     }
 
     task "cw-website-server" {
-      env {
-        SERVER_PORT = "${NOMAD_PORT_cw-website-server}"
-      }
-
       driver = "docker"
 
       config {

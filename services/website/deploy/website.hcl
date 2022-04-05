@@ -7,7 +7,7 @@ job "cw-website" {
 
     network {
       port "cw-website-server" {
-        to = "1313"
+        static = "1313"
       }
     }
 

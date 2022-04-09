@@ -36,7 +36,7 @@ job "cw-website" {
       driver = "docker"
 
       config {
-        image = "coldwireorg/website:v0.1.3"
+        image = "coldwireorg/website:v0.1.4"
         ports = ["cw-website-server"]
         network_mode = "host"
       }

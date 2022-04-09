@@ -15,6 +15,7 @@ driver = "postgres"
   name = "auth"
 
 [hydra]
+proxy = "false"
 admin = "http://{{ env "HYDRA_ADDR" }}"
 public = "https://auth.coldwire.org/"
 

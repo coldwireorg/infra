@@ -80,13 +80,12 @@ job "cw-matrix" {
       config {
         image = "dotwee/element-web:latest"
         ports = ["cw-matrix-element"]
-        volumes = ["local/element.json:/app/element.json"]
+        volumes = ["local/element.json:/etc/element-web/config.json"]
       }
 
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/matrix/config/element.json"
-        destination = "local/element.json"
-        mode = "file"
+        destination = "local/"
       }
     }
   }

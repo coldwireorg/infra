@@ -1,16 +1,28 @@
 {
-  "default_server_name": "coldwire.org",
-  "brand": "Coldwire",
-  "showLabsSettings": true,
-  "roomDirectory": {
-    "servers": [
-      "coldwire.org",
-      "matrix.org",
-      "gitter.im",
-      "libera.chat"
+  "default_server_config": {
+    "m.homeserver": {
+      "base_url": "https://coldwire.org",
+      "server_name": "coldwire.org"
+    }
+  },
+  "branding": {
+    "welcomeBackgroundUrl": "https://static.coldwire.org/imgs/background.jpg",
+    "authHeaderLogoUrl": "https://static.coldwire.org/imgs/logo.svg",
+    "authFooterLinks": [
+      {
+        "text": "Account",
+        "url": "https://auth.coldwire.org"
+      },
+      {
+        "text": "Website",
+        "url": "https://coldwire.org"
+      }
     ]
   },
+  "default_theme": "dark",
+  "permalinkPrefix": "https://coldwire.org",
+  "disable_guests": true,
   "features": {
-    "feature_spotlight": true
+      "feature_spotlight": true
   }
 }

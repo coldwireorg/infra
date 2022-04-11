@@ -71,6 +71,15 @@ job "cw-auth" {
         destination = "secrets/config.toml"
       }
 
+      template {
+        data = <<EOH
+          JWT_KEY="{{ with secret "services/data/cw-auth" }}{{ .Data.data.web_jwt_key }}{{ end }}"
+        EOH
+
+        destination = "secrets/vault.env"
+        env = true
+      }
+
       vault {
         policies = ["cw-auth"]
         change_mode   = "signal"

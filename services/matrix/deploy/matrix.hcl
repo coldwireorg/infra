@@ -78,7 +78,7 @@ job "cw-matrix" {
       }
 
       config {
-        image = "vectorim/element-web:latest"
+        image = "dotwee/element-web:latest"
         ports = ["cw-matrix-element"]
         volumes = ["local/element.json:/app/element.json"]
       }

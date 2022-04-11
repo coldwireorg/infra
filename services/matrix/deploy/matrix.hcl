@@ -1,16 +1,112 @@
-job "cw-matrix" {
+job "cw-matrix-cinny" {
   datacenters = ["coldnet"]
   priority = 60
 
-  group "cw-matrix" {
+  group "cw-matrix-cinny" {
+    network {
+      port "cw-matrix-cinny" {
+        to = 80
+      }
+    }
+
+    restart {
+      attempts = 30
+      delay    = "15s"
+    }
+
+    task "cw-matrix-cinny" {
+      driver = "docker"
+
+      service {
+        name = "cw-matrix-cinny"
+        port = "cw-matrix-cinny"
+
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.cw-matrix-cinny.rule=Host(`cinny.coldwire.org`)",
+          "traefik.http.routers.cw-matrix-cinny.tls=true",
+          "traefik.http.routers.cw-matrix-cinny.tls.certresolver=coldwire",
+        ]
+
+        check {
+          type     = "http"
+          path     = "/"
+          interval = "2s"
+          timeout  = "2s"
+        }
+      }
+
+      config {
+        image = "coldwireorg/cinny:v1.8.2"
+        ports = ["cw-matrix-cinny"]
+      }
+    }
+  }
+}
+
+job "cw-matrix-element" {
+  datacenters = ["coldnet"]
+  priority = 60
+
+  group "cw-matrix-element" {
+    network {
+      port "cw-matrix-element" {
+        to = 80
+      }
+    }
+
+    restart {
+      attempts = 30
+      delay    = "15s"
+    }
+
+    task "cw-matrix-element" {
+      driver = "docker"
+
+      service {
+        name = "cw-matrix-element"
+        port = "cw-matrix-element"
+
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.cw-matrix-element.rule=Host(`organize.coldwire.org`)",
+          "traefik.http.routers.cw-matrix-element.tls=true",
+          "traefik.http.routers.cw-matrix-element.tls.certresolver=coldwire",
+        ]
+
+        check {
+          type     = "http"
+          path     = "/"
+          interval = "2s"
+          timeout  = "2s"
+        }
+      }
+
+      config {
+        image = "vectorim/element-web:latest"
+        ports = ["cw-matrix-element"]
+        volumes = ["local/element.json:/app/element.json"]
+      }
+
+      artifact {
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/matrix/config/element.json"
+        destination = "local/"
+        mode = "file"
+      }
+    }
+  }
+}
+
+job "cw-matrix-synapse" {
+  datacenters = ["coldnet"]
+  priority = 60
+
+  group "cw-matrix-synapse" {
     count = 1
 
     network {
       port "cw-matrix-synapse" {
         to = -1
-      }
-      port "cw-matrix-cinny" {
-        to = 80
       }
       port "cw-matrix-database" {
         to = -1
@@ -150,34 +246,6 @@ job "cw-matrix" {
         policies = ["cw-matrix"]
         change_mode   = "signal"
         change_signal = "SIGHUP"
-      }
-    }
-
-    task "cw-matrix-cinny" {
-      driver = "docker"
-
-      service {
-        name = "cw-matrix-cinny"
-        port = "cw-matrix-cinny"
-
-        tags = [
-          "traefik.enable=true",
-          "traefik.http.routers.cw-matrix-cinny.rule=Host(`organize.coldwire.org`)",
-          "traefik.http.routers.cw-matrix-cinny.tls=true",
-          "traefik.http.routers.cw-matrix-cinny.tls.certresolver=coldwire",
-        ]
-
-        check {
-          type     = "http"
-          path     = "/"
-          interval = "2s"
-          timeout  = "2s"
-        }
-      }
-
-      config {
-        image = "coldwireorg/cinny:v1.8.2"
-        ports = ["cw-matrix-cinny"]
       }
     }
   }

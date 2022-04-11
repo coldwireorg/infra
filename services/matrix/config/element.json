@@ -1,0 +1,16 @@
+{
+  "default_server_name": "coldwire.org",
+  "brand": "Coldwire",
+  "showLabsSettings": true,
+  "roomDirectory": {
+    "servers": [
+      "coldwire.org",
+      "matrix.org",
+      "gitter.im",
+      "libera.chat"
+    ]
+  },
+  "features": {
+    "feature_spotlight": true
+  }
+}

@@ -85,7 +85,7 @@ job "cw-matrix" {
 
       artifact {
         source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/matrix/config/element.json"
-        destination = "local/"
+        destination = "local/element.json"
         mode = "file"
       }
     }

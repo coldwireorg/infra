@@ -1,4 +1,4 @@
-job "cw-matrix-cinny" {
+job "cw-matrix" {
   datacenters = ["coldnet"]
   priority = 60
 
@@ -42,11 +42,6 @@ job "cw-matrix-cinny" {
       }
     }
   }
-}
-
-job "cw-matrix-element" {
-  datacenters = ["coldnet"]
-  priority = 60
 
   group "cw-matrix-element" {
     network {
@@ -95,11 +90,6 @@ job "cw-matrix-element" {
       }
     }
   }
-}
-
-job "cw-matrix-synapse" {
-  datacenters = ["coldnet"]
-  priority = 60
 
   group "cw-matrix-synapse" {
     count = 1

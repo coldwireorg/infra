@@ -1,4 +1,4 @@
-path "services/data/cw-auth" {
+path "services/data/cw-matrix" {
   capabilities = ["read"]
 }
 

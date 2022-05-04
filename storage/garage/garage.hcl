@@ -1,13 +1,7 @@
 job "cw-storage" {
-  datacenters = ["coldnet"]
+  datacenters = ["coldnet-storage"]
+  type = "system"
   priority = 100
-  
-  constraint {
-    distinct_hosts = true
-    attribute = "${node.unique.name}"
-    operator  = "set_contains"
-    value     = "storage"
-  }
 
   group "cw-storage-server" {
     network {

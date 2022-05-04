@@ -1,5 +1,5 @@
 job "cw-website" {
-  datacenters = ["dc1", "coldnet"]
+  datacenters = ["coldnet-compute"]
   priority = 60
 
   group "cw-website-server" {

@@ -13,3 +13,8 @@ rpc_secret = "{{ with secret "system/data/cw-garage" }}{{ .Data.data.rpc_secret 
 s3_region = "garage"
 api_bind_addr = "{{ env "SRV_IP" }}:3900"
 root_domain = ".s3.garage"
+
+[s3_web]
+bind_addr = "{{ env "SRV_IP" }}:3902"
+root_domain = ".web.garage"
+index = "index.html"

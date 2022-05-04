@@ -57,6 +57,23 @@ job "cw-stolon" {
           timeout = "5s"
         }
       }
+
+      artifact {
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/storage/postgres/config/env.tpl"
+        destination = "local/"
+      }
+
+      template {
+        source = "local/env.tpl"
+        destination = "secrets/env"
+        env = true
+      }
+
+      vault {
+        policies = ["cw-stolon"]
+        change_mode   = "signal"
+        change_signal = "SIGHUP"
+      }
     }
 
     task "sentinel" {
@@ -77,23 +94,6 @@ job "cw-stolon" {
       resources {
         memory = 100
       }
-    }
-
-    artifact {
-      source = "https://codeberg.org/coldwire/infra/raw/branch/main/storage/postgres/config/env.tpl"
-      destination = "local/"
-    }
-
-    template {
-      source = "local/env.tpl"
-      destination = "secrets/env"
-      env = true
-    }
-
-    vault {
-      policies = ["cw-stolon"]
-      change_mode   = "signal"
-      change_signal = "SIGHUP"
     }
   }
 

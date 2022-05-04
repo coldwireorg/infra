@@ -59,7 +59,7 @@ job "cw-stolon" {
       }
 
       artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/storage/postgres/config/env.tpl"
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/system/postgres/config/env.tpl"
         destination = "local/"
       }
 

@@ -35,8 +35,17 @@ job "cw-storage" {
 
       config {
         image = "dxflrs/arm64_garage:v0.7.0"
+        command = "/garage"
+        args = [ "server" ]
+
         ports = ["cw-storage-garage" "cw-storage-s3"]
         network_mode = "host"
+
+        volumes = [
+          "/storage/data:/data",
+          "/storage/meta:/meta",
+          "secrets/config.toml:/etc/garage.toml",
+        ]
       }
 
       artifact {
@@ -50,7 +59,7 @@ job "cw-storage" {
       }
 
       vault {
-        policies = ["cw-storage"]
+        policies = ["cw-garage"]
         change_mode   = "signal"
         change_signal = "SIGHUP"
       }

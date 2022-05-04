@@ -1,5 +1,3 @@
-datacenter = "coldnet"
-
 data_dir   = "/opt/nomad"
 plugin_dir = "/opt/plugins"
 

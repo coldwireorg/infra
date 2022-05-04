@@ -1,22 +1,22 @@
-job "cw-storage" {
+job "cw-garage" {
   datacenters = ["coldnet-storage"]
   type = "system"
   priority = 100
 
-  group "cw-storage-server" {
+  group "cw-garage" {
     network {
-      port "cw-storage-garage" {
+      port "cw-garage-server" {
         static = 3901
       }
 
-      port "cw-storage-s3" {
+      port "cw-garage-s3" {
         static = 3900
       }
     }
 
     service {
-      name = "cw-storage-garage"
-      port = "cw-storage-garage"
+      name = "cw-garage"
+      port = "cw-garage"
 
       address_mode = "host"
 
@@ -28,11 +28,11 @@ job "cw-storage" {
       }
     }
 
-    task "cw-storage-garage" {
+    task "cw-garage-server" {
       driver = "docker"
 
       env {
-        SRV_IP = "${NOMAD_IP_cw-storage-garage}"
+        SRV_IP = "${NOMAD_IP_cw-garage-server}"
       }
 
       config {
@@ -55,7 +55,7 @@ job "cw-storage" {
       }
 
       artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/storage/config.toml.tpl"
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/storage/garage/config.toml.tpl"
         destination = "local/"
       }
 

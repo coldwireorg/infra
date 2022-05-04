@@ -33,7 +33,8 @@ job "cw-stolon" {
           "--pg-repl-password", "${PG_REPL_PWD}",
           "--pg-listen-address", "${NOMAD_IP_keeper}",
           "--pg-port", "${NOMAD_PORT_keeper}",
-          "--pg-bin-path", "/usr/lib/postgresql/14/bin/"
+          "--pg-bin-path", "/usr/lib/postgresql/14/bin/",
+          "--disable-data-dir-locking"
         ]
 
         ports = [ "keeper" ]

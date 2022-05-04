@@ -34,10 +34,13 @@ mkdir ${CONSUL_DIR}
 mkdir /opt/consul
 
 # download config
-wget ${NOMAD_CONF} -P ${NOMAD_DIR} -O nomad.hcl
-wget ${CONSUL_CONF} -P ${CONSUL_DIR} -O consul.hcl
+wget ${NOMAD_CONF} -O nomad.hcl
+wget ${CONSUL_CONF} -O consul.hcl
+
+sudo mv nomad.hcl ${NOMAD_DIR}/
+sudo mv consul.hcl ${CONSUL_DIR}/
+
 sed -i 'datacenter = "${DATACENTER}"' ${NOMAD_DIR}/nomad.hcl # add region to nomad
-sed -i 'datacenter = "coldnet-${DATACENTER}"' ${NOMAD_DIR}/consul.hcl # add region to nomad
 
 # download service files
 wget ${NOMAD_SERVICE} -P /etc/systemd/system/

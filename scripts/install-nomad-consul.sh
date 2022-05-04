@@ -8,6 +8,7 @@ REGION=$4
 if [ $# -lt 4 ]
 then
   echo "usage: ./script.sh <architecture (arm64/amd64)> <version of nomad (1.2.6)> <version of consul (1.12.0)> <region/type of server (storage or node)>"
+  exit
 fi
 
 # binaries

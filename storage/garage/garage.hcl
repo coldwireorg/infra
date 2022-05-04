@@ -38,7 +38,11 @@ job "cw-storage" {
         command = "/garage"
         args = [ "server" ]
 
-        ports = ["cw-storage-garage" "cw-storage-s3"]
+        ports = [
+          "cw-storage-garage",
+          "cw-storage-s3"
+        ]
+
         network_mode = "host"
 
         volumes = [

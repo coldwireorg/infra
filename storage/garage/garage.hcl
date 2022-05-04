@@ -41,8 +41,8 @@ job "cw-garage" {
         args = [ "server" ]
 
         ports = [
-          "cw-storage-garage",
-          "cw-storage-s3"
+          "cw-garage-server",
+          "cw-garage-s3"
         ]
 
         network_mode = "host"

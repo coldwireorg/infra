@@ -15,10 +15,6 @@ job "cw-stolon" {
       }
     }
 
-    resources {
-      memory = 1000
-    }
-
     task "keeper" {
       driver = "docker"
 
@@ -111,40 +107,40 @@ job "cw-stolon" {
       port "proxy" {
         static = 5432
       }
+    }
 
-      task "proxy" {
-        driver = "docker"
+    task "proxy" {
+      driver = "docker"
 
-        config {
-          image = "coldwireorg/postgres:v0.0.1"
-          network_mode = "host" 
-          readonly_rootfs = false
-          command = "/usr/local/bin/stolon-proxy" 
-          args = [
-            "--cluster-name", "coldnet",
-            "--store-backend", "consul",
-            "--store-endpoints", "http://10.42.0.1:8500",
-            "--port", "${NOMAD_PORT_proxy}",
-            "--listen-address", "${NOMAD_IP_proxy}",
-            "--log-level", "info"
-          ]
-          ports = ["proxy"]
-        }
+      config {
+        image = "coldwireorg/postgres:v0.0.1"
+        network_mode = "host" 
+        readonly_rootfs = false
+        command = "/usr/local/bin/stolon-proxy" 
+        args = [
+          "--cluster-name", "coldnet",
+          "--store-backend", "consul",
+          "--store-endpoints", "http://10.42.0.1:8500",
+          "--port", "${NOMAD_PORT_proxy}",
+          "--listen-address", "${NOMAD_IP_proxy}",
+          "--log-level", "info"
+        ]
+         ports = ["proxy"]
+      }
 
-        resources {
-          memory = 100
-        }
+      resources {
+        memory = 100
+      }
 
-        service {
-          name = "cw-stolon-proxy"
+      service {
+        name = "cw-stolon-proxy"
+        port = "proxy"
+        address_mode = "host"
+        check {
+          type = "tcp"
           port = "proxy"
-          address_mode = "host"
-          check {
-            type = "tcp"
-            port = "proxy"
-            interval = "60s"
-            timeout = "5s"
-          }
+          interval = "60s"
+          timeout = "5s"
         }
       }
     }

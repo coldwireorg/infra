@@ -16,7 +16,7 @@ job "cw-garage" {
 
     service {
       name = "cw-garage"
-      port = "cw-garage"
+      port = "cw-garage-server"
 
       address_mode = "host"
 

@@ -55,7 +55,7 @@ job "cw-garage" {
       }
 
       artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/storage/garage/config.toml.tpl"
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/storage/garage/config/config.toml.tpl"
         destination = "local/"
       }
 

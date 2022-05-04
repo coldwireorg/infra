@@ -5,6 +5,11 @@ job "cw-static" {
   group "cw-static-server" {
     count = 4
 
+    constraint {
+      operator  = "distinct_hosts"
+      value     = "true"
+    }
+
     network {
       port "cw-static-server" {
         to = -1

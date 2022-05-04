@@ -29,6 +29,8 @@ job "cw-storage" {
     }
 
     task "cw-storage-garage" {
+      driver = "docker"
+
       env {
         SRV_IP = "${NOMAD_IP_cw-storage-garage}"
       }

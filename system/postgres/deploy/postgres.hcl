@@ -122,8 +122,8 @@ job "cw-stolon" {
           "--store-backend", "consul",
           "--store-endpoints", "http://10.42.0.1:8500",
           "--port", "${NOMAD_PORT_proxy}",
-          "--listen-address", "0.0.0.0",
-          "--log-level", "info"
+          "--listen-address", "${NOMAD_IP_proxy}",
+          "--log-level", "error"
         ]
          ports = ["proxy"]
       }

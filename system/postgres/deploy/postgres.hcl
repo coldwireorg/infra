@@ -98,11 +98,6 @@ job "cw-stolon" {
   }
 
   group "cw-stolon-proxy" {
-    constraint {
-      attribute = "${node.datacenter}"
-      value = "coldnet-compute"
-    }
-
     network {
       port "proxy" {
         static = 5432

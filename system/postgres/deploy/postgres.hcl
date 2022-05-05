@@ -100,7 +100,7 @@ job "cw-stolon" {
   group "cw-stolon-proxy" {
     network {
       port "proxy" {
-        static = 5432
+        static = 6432
       }
     }
 

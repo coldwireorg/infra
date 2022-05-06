@@ -15,9 +15,9 @@ job "cw-garage" {
       port = "s3"
       address_mode = "host"
       check {
-        type     = "http"
+        type     = "tcp"
         path     = "/"
-        interval = "2s"
+        interval = "60s"
         timeout  = "2s"
       }
     }

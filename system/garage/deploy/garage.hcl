@@ -1,25 +1,19 @@
 job "cw-garage" {
-  datacenters = ["coldnet-storage"]
+  datacenters = ["coldnet-compute", "coldnet-storage"]
   type = "system"
   priority = 100
 
-  group "cw-garage" {
+  group "server" {
     network {
-      port "cw-garage-server" {
-        static = 3901
-      }
-
-      port "cw-garage-s3" {
-        static = 3900
-      }
+      port "s3" { static = 3900 }
+      port "rpc" { static = 3901 }
+      port "web" { static = 3902 }
     }
 
     service {
-      name = "cw-garage"
-      port = "cw-garage-server"
-
+      name = "cw-garage-s3"
+      port = "s3"
       address_mode = "host"
-
       check {
         type     = "http"
         path     = "/"
@@ -28,11 +22,11 @@ job "cw-garage" {
       }
     }
 
-    task "cw-garage-server" {
+    task "server" {
       driver = "docker"
 
       env {
-        SRV_IP = "${NOMAD_IP_cw-garage-server}"
+        SRV_IP = "${NOMAD_IP_s3}"
       }
 
       config {
@@ -41,8 +35,9 @@ job "cw-garage" {
         args = [ "server" ]
 
         ports = [
-          "cw-garage-server",
-          "cw-garage-s3"
+          "s3",
+          "rpc",
+          "web"
         ]
 
         network_mode = "host"

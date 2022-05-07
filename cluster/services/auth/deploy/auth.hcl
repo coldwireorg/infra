@@ -5,7 +5,7 @@ job "cw-auth" {
     count = 1
 
     network {
-      port "auth-web" {
+      port "web" {
         to = -1
       }
 
@@ -22,11 +22,11 @@ job "cw-auth" {
       delay = "15s"
     }
 
-    task "auth-web" {
+    task "web" {
       driver = "docker"
 
       service {
-        name = "cw-auth-web-server"
+        name = "cw-auth-web"
         port = "auth-web"
 
         address_mode = "host"
@@ -80,68 +80,12 @@ job "cw-auth" {
         change_signal = "SIGHUP"
       }
     }
-    
-    task "cw-auth-web-database" {
-      driver = "docker"
 
-      lifecycle {
-        hook = "prestart"
-        sidecar = true
-      }
-
-      env {
-        POSTGRES_USER = "postgres"
-        POSTGRES_DB = "auth"
-        PGPORT = "${NOMAD_PORT_cw-auth-web-database}"
-      }
-
-      config {
-        image = "postgres:latest"
-        ports = ["cw-auth-web-database"]
-        network_mode = "host"
-
-        volumes = [
-          "/mnt/storage/services/auth/web/database:/var/lib/postgresql/data",
-          "local/tables.sql:/docker-entrypoint-initdb.d/tables.sql",
-        ]
-      }
-
-      service {
-        name = "cw-auth-web-database"
-        port = "cw-auth-web-database"
-
-        address_mode = "host"
-
-        check {
-          type     = "script"
-          command = "pg_isready"
-          args = ["-q", "-d", "postgres", "-U", "postgres"]
-          interval = "10s"
-          timeout  = "120s"
-        }
-      }
-      
-      template {
-        data = <<EOH
-          POSTGRES_PASSWORD={{ with secret "services/data/cw-auth" }}{{ .Data.data.web_db_password }}{{ end }}
-        EOH
-
-        destination = "secrets/vault.env"
-        env = true
-      }
-
-      vault {
-        policies = ["cw-auth"]
-        change_mode   = "signal"
-        change_signal = "SIGHUP"
-      }
-    }
-
-    task "cw-auth-hydra-server" {
+    task "hydra" {
       driver = "docker"
 
       service {
-        name = "cw-auth-hydra-server"
+        name = "cw-auth-hydra"
         port = "cw-auth-hydra-public"
 
         address_mode = "host"
@@ -156,19 +100,19 @@ job "cw-auth" {
 
       env {
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
-        SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
-        SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
+        SERVE_ADMIN_PORT="${NOMAD_PORT_hydra-admin}"
+        SERVE_PUBLIC_PORT="${NOMAD_PORT_hydra-public}"
         URLS_LOGIN="https://auth.coldwire.org/#/sign-in"
         URLS_CONSENT="https://auth.coldwire.org/api/auth/consent"
         URLS_LOGOUT="https://auth.coldwire.org/api/auth/logout"
         URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/#/sign-in"
         URLS_SELF_ISSUER="https://auth.coldwire.org"
-        DB_ADDR="${NOMAD_ADDR_cw-auth-hydra-database}"
+        DB_ADDR="${NOMAD_IP_hydra-admin}:6432"
       }
 
       config {
-        image = "oryd/hydra:v1.11.7"
-        ports = ["cw-auth-hydra-public", "cw-auth-hydra-admin"]
+        image = "oryd/hydra:v1.11.8"
+        ports = ["hydra-public", "hydra-admin"]
         network_mode = "host"
 
         command = "serve"
@@ -182,7 +126,7 @@ job "cw-auth" {
       template {
         data = <<EOH
           SECRETS_SYSTEM={{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_server_secret }}{{ end }}
-          DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}@{{ env "DB_ADDR" }}/hydra
+          DSN=postgres://postgres:{{ with secret "system/data/cw-stolon" }}{{ .Data.data.psql_su_password }}{{ end }}@{{ env "DB_ADDR" }}/cw_hydra
         EOH
 
         destination = "secrets/vault.env"
@@ -196,7 +140,7 @@ job "cw-auth" {
       }
     }
 
-    task "cw-auth-hydra-migrate" {
+    task "hydra-migrate" {
       driver = "docker"
 
       lifecycle {
@@ -213,11 +157,11 @@ job "cw-auth" {
         URLS_LOGOUT="https://auth.coldwire.org/api/logout"
         URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/sign-in"
         URLS_SELF_ISSUER="https://auth.coldwire.org/"
-        DB_ADDR="${NOMAD_ADDR_cw-auth-hydra-database}"
+        DB_ADDR="${NOMAD_IP_hydra-admin}:6432"
       }
 
       config {
-        image = "oryd/hydra:v1.11.7"
+        image = "oryd/hydra:v1.11.8"
         network_mode = "host"
 
         command = "migrate"
@@ -231,7 +175,7 @@ job "cw-auth" {
       template {
         data = <<EOH
           SECRETS_SYSTEM={{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_server_secret }}{{ end }}
-          DSN=postgres://postgres:{{ with secret "system/data/cw-stolon" }}{{ .Data.data.psql_su_password }}{{ end }}@{{ env "DB_ADDR" }}/hydra
+          DSN=postgres://postgres:{{ with secret "system/data/cw-stolon" }}{{ .Data.data.psql_su_password }}{{ end }}@{{ env "DB_ADDR" }}/cw_hydra
         EOH
 
         destination = "secrets/vault.env"

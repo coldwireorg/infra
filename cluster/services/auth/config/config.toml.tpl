@@ -12,7 +12,7 @@ driver = "postgres"
   port = "{{ env "DB_PORT" }}"
   user = "postgres"
   password = "{{ with secret "system/data/cw-stolon" }}{{ .Data.data.psql_su_password }}{{ end }}"
-  name = "cw-auth"
+  name = "cw_auth"
 
 [hydra]
 proxy = "false"

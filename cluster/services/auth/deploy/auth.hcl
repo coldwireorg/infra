@@ -86,7 +86,7 @@ job "cw-auth" {
 
       service {
         name = "cw-auth-hydra"
-        port = "cw-auth-hydra-public"
+        port = "hydra-public"
 
         address_mode = "host"
 
@@ -150,8 +150,8 @@ job "cw-auth" {
 
       env {
         SERVE_COOKIES_SAME_SITE_MODE="Lax"
-        SERVE_ADMIN_PORT="${NOMAD_PORT_cw-auth-hydra-admin}"
-        SERVE_PUBLIC_PORT="${NOMAD_PORT_cw-auth-hydra-public}"
+        SERVE_ADMIN_PORT="${NOMAD_PORT_hydra-admin}"
+        SERVE_PUBLIC_PORT="${NOMAD_PORT_hydra-public}"
         URLS_LOGIN="https://auth.coldwire.org/sign-in"
         URLS_CONSENT="https://auth.coldwire.org/api/consent"
         URLS_LOGOUT="https://auth.coldwire.org/api/logout"

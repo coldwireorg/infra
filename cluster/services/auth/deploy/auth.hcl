@@ -27,7 +27,7 @@ job "cw-auth" {
 
       service {
         name = "cw-auth-web"
-        port = "auth-web"
+        port = "web"
 
         address_mode = "host"
 
@@ -51,7 +51,7 @@ job "cw-auth" {
 
       config {
         image = "coldwireorg/auth:v0.3.4"
-        ports = ["auth-web"]
+        ports = ["web"]
         network_mode = "host"
       }
 

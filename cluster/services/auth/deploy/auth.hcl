@@ -42,7 +42,7 @@ job "cw-auth" {
       env {
         CONFIG_FILE="/secrets/config.toml"
 
-        SRV_PORT ="${NOMAD_PORT_auth-web}"
+        SRV_PORT ="${NOMAD_PORT_web}"
         HYDRA_ADDR = "${NOMAD_IP_hydra-admin}:${NOMAD_PORT_hydra-admin}"
 
         DB_ADDR="${attr.unique.network.ip-address}"

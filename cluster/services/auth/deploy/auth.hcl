@@ -5,64 +5,58 @@ job "cw-auth" {
     count = 1
 
     network {
-      port "cw-auth-web-server" {
-        to = -1
-      }
-      port "cw-auth-web-database" {
+      port "auth-web" {
         to = -1
       }
 
-      port "cw-auth-hydra-public" {
+      port "hydra-public" {
         to = -1
       }
-      port "cw-auth-hydra-admin" {
-        to = -1
-      }
-      port "cw-auth-hydra-database" {
+      port "hydra-admin" {
         to = -1
       }
     }
 
     restart {
       attempts = 30
-      delay    = "15s"
+      delay = "15s"
     }
 
-    task "cw-auth-web-server" {
+    task "auth-web" {
       driver = "docker"
 
       service {
         name = "cw-auth-web-server"
-        port = "cw-auth-web-server"
+        port = "auth-web"
 
         address_mode = "host"
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.cw-auth-web-server.rule=Host(`auth.coldwire.org`)",
-          "traefik.http.routers.cw-auth-web-server.tls=true",
-          "traefik.http.routers.cw-auth-web-server.tls.certresolver=coldwire",
+          "traefik.http.routers.cw-auth-web.rule=Host(`auth.coldwire.org`)",
+          "traefik.http.routers.cw-auth-web.tls=true",
+          "traefik.http.routers.cw-auth-web.tls.certresolver=coldwire",
         ]
       }
 
       env {
         CONFIG_FILE="/secrets/config.toml"
 
-        SRV_PORT ="${NOMAD_PORT_cw-auth-web-server}"
-        HYDRA_ADDR = "${NOMAD_IP_cw-auth-hydra-admin}:${NOMAD_PORT_cw-auth-hydra-admin}"
+        SRV_PORT ="${NOMAD_PORT_auth-web}"
+        HYDRA_ADDR = "${NOMAD_IP_hydra-admin}:${NOMAD_PORT_hydra-admin}"
 
-        DB_ADDR="${NOMAD_IP_cw-auth-web-database}"
-        DB_PORT="${NOMAD_PORT_cw-auth-web-database}"
+        DB_ADDR="${NOMAD_IP_auth-web}"
+        DB_PORT="6432"
       }
 
       config {
-        image = "coldwireorg/auth:v0.3.2"
-        ports = ["cw-auth-web-server"]
+        image = "coldwireorg/auth:v0.3.3"
+        ports = ["auth-web"]
         network_mode = "host"
       }
 
       artifact {
-        source = "https://codeberg.org/coldwire/infra/raw/branch/main/services/auth/config/config.toml.tpl"
+        source = "https://codeberg.org/coldwire/infra/raw/branch/main/cluster/services/auth/config/config.toml.tpl"
         destination = "local/"
       }
 
@@ -237,63 +231,7 @@ job "cw-auth" {
       template {
         data = <<EOH
           SECRETS_SYSTEM={{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_server_secret }}{{ end }}
-          DSN=postgres://postgres:{{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}@{{ env "DB_ADDR" }}/hydra
-        EOH
-
-        destination = "secrets/vault.env"
-        env = true
-      }
-
-      vault {
-        policies = ["cw-auth"]
-        change_mode   = "signal"
-        change_signal = "SIGHUP"
-      }
-    }
-
-    task "cw-auth-hydra-database" {
-      driver = "docker"
-
-      lifecycle {
-        hook = "prestart"
-        sidecar = true
-      }
-
-      env {
-        POSTGRES_USER = "postgres"
-        POSTGRES_DB = "hydra"
-        PGPORT = "${NOMAD_PORT_cw-auth-hydra-database}"
-        DB_ADDR="${NOMAD_ADDR_cw-auth-hydra-database}"
-      }
-
-      config {
-        image = "postgres:latest"
-        ports = ["cw-auth-hydra-database"]
-        network_mode = "host"
-
-        volumes = [
-          "/mnt/storage/services/auth/hydra/database:/var/lib/postgresql/data",
-        ]
-      }
-
-      service {
-        name = "cw-auth-hydra-database"
-        port = "cw-auth-hydra-database"
-
-        address_mode = "host"
-
-        check {
-          type     = "script"
-          command = "pg_isready"
-          args = ["-q", "-d", "postgres", "-U", "postgres"]
-          interval = "10s"
-          timeout  = "120s"
-        }
-      }
-
-      template {
-        data = <<EOH
-          POSTGRES_PASSWORD={{ with secret "services/data/cw-auth" }}{{ .Data.data.hydra_db_password }}{{ end }}
+          DSN=postgres://postgres:{{ with secret "system/data/cw-stolon" }}{{ .Data.data.psql_su_password }}{{ end }}@{{ env "DB_ADDR" }}/hydra
         EOH
 
         destination = "secrets/vault.env"

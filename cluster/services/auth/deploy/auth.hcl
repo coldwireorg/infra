@@ -107,7 +107,7 @@ job "cw-auth" {
         URLS_LOGOUT="https://auth.coldwire.org/api/auth/logout"
         URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/#/sign-in"
         URLS_SELF_ISSUER="https://auth.coldwire.org"
-        DB_ADDR="${NOMAD_IP_hydra-admin}:6432"
+        DB_ADDR="${attr.unique.network.ip-address}:6432"
       }
 
       config {
@@ -157,7 +157,7 @@ job "cw-auth" {
         URLS_LOGOUT="https://auth.coldwire.org/api/logout"
         URLS_POST_LOGOUT_REDIRECT="https://auth.coldwire.org/sign-in"
         URLS_SELF_ISSUER="https://auth.coldwire.org/"
-        DB_ADDR="${NOMAD_IP_hydra-admin}:6432"
+        DB_ADDR="${attr.unique.network.ip-address}:6432"
       }
 
       config {

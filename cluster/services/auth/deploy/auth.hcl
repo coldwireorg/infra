@@ -1,5 +1,5 @@
 job "cw-auth" {
-  datacenters = ["dc1", "coldnet"]
+  datacenters = ["coldnet-compute"]
 
   group "cw-auth" {
     count = 1

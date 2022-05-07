@@ -45,7 +45,7 @@ job "cw-auth" {
         SRV_PORT ="${NOMAD_PORT_auth-web}"
         HYDRA_ADDR = "${NOMAD_IP_hydra-admin}:${NOMAD_PORT_hydra-admin}"
 
-        DB_ADDR="${NOMAD_IP_auth-web}"
+        DB_ADDR="${attr.unique.network.ip-address}"
         DB_PORT="6432"
       }
 
